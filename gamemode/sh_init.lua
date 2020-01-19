@@ -56,6 +56,8 @@ config.prisonerSpecialChance = makeConfig("jb_config_prisoner_special_chance","1
 config.knivesAreConcealed = makeConfig("jb_config_knives_are_concealed","1");
 config.roundsPerMap = makeConfig("jb_config_rounds_per_map","9999");
 config.notifyLG = makeConfig("jb_config_notify_lastguard",1);
+config.guardStartsWithWeapons = makeConfig("jb_config_guard_starts_with_weapons","1"); -- guard only has fists, that way they can easily choose weapons
+config.sprintViewBob = makeConfig("jb_config_sprint_view_bob","1"); -- disable view bob
 
 -- meta stuff
 JB = {}

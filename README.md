@@ -22,6 +22,8 @@ Convar                                     | Effect
 `jb_config_knives_are_concealed 1`           | Conceal knives - they won't draw on the player's tigh if this is set to 1.
 `jb_config_rounds_per_map 10`                 | Rounds until mapvote - ONLY SET THIS IF YOU HAVE A MAPVOTE SYSTEM ON YOUR SERVER/COMMUNITY
 `jb_config_notify_lastguard 1/0`           | Send the "last guard kills all" notification
+`jb_config_sprint_view_bob 1/0`                 | Set to 0 to disable head/view bob.
+`jb_config_guard_starts_with_weapons 1/0`           | Set to 0 to disable guards starting with weapons (they can still pick up weapons)
 
 ## Developers
 

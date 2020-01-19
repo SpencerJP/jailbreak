@@ -58,9 +58,10 @@ local randomGuardSidearms = {"weapon_jb_deagle","weapon_jb_usp","weapon_jb_fives
 local randomGuardPrimary = {"weapon_jb_ak47","weapon_jb_aug","weapon_jb_galil","weapon_jb_m4a1","weapon_jb_mac10","weapon_jb_mp5navy","weapon_jb_p90","weapon_jb_scout","weapon_jb_sg552","weapon_jb_ump"};
 function PLAYER:Loadout()
 	self.Player:Give("weapon_jb_fists");
-
-	self.Player:Give( table.Random( randomGuardSidearms ) )
-	self.Player:Give( table.Random( randomGuardPrimary ) );
+	if JB.Config.guardStartsWithWeapons == "1" then
+		self.Player:Give( table.Random( randomGuardSidearms ) )
+		self.Player:Give( table.Random( randomGuardPrimary ) );
+	end
 	self.Player:GiveAmmo( 255, "Pistol", true )
 	self.Player:GiveAmmo( 512, "SMG1", true )
 end
