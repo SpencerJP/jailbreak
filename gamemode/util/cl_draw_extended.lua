@@ -29,54 +29,52 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
-
-/* 
+--[[ 
 
 	drawSimpleShadowText
 	draws a text with a shadow font under it.
 
-*/
+]]
+-- we will probably call this many times each frame, so let's localize a bit
+local getTextSize = surface.GetTextSize
+local setTextPos = surface.SetTextPos
+local setTextColor = surface.SetTextColor
+local setFont = surface.SetFont
+local drawText = surface.DrawText
+local ceil = math.ceil
+local w, h
 
-// we will probably call this many times each frame, so let's localize a bit
-local getTextSize = surface.GetTextSize;
-local setTextPos = surface.SetTextPos;
-local setTextColor = surface.SetTextColor;
-local setFont = surface.SetFont;
-local drawText = surface.DrawText;
-local ceil = math.ceil;
-local w,h;
+-- actual function
+function JB.Util.drawSimpleShadowText(text, font, x, y, color, xalign, yalign, passes)
+    if not font or not x or not y or not color or not xalign or not yalign then return end
+    passes = passes or 2
+    text = tostring(text)
+    setFont(font .. "Shadow")
+    w, h = getTextSize(text)
 
-// actual function
-function JB.Util.drawSimpleShadowText(text,font,x,y,color,xalign,yalign,passes)
-	if not font or not x or not y or not color or not xalign or not yalign then return end
+    if (xalign == TEXT_ALIGN_CENTER) then
+        x = x - w / 2
+    elseif (xalign == TEXT_ALIGN_RIGHT) then
+        x = x - w
+    end
 
-	passes=passes or 2;
-	text 	= tostring( text )
-	setFont(font.."Shadow");
+    if (yalign == TEXT_ALIGN_CENTER) then
+        y = y - h / 2
+    elseif (yalign == TEXT_ALIGN_BOTTOM) then
+        y = y - h
+    end
 
-	w,h = getTextSize( text )
+    setTextColor(0, 0, 0, color.a)
 
-	if (xalign == TEXT_ALIGN_CENTER) then
-		x = x - w/2
-	elseif (xalign == TEXT_ALIGN_RIGHT) then
-		x = x - w
-	end
+    for i = 1, passes do
+        setTextPos(ceil(x), ceil(y))
+        drawText(text)
+    end
 
-	if (yalign == TEXT_ALIGN_CENTER) then
-		y = y - h/2
-	elseif ( yalign == TEXT_ALIGN_BOTTOM ) then
-		y = y - h
-	end
+    setFont(font)
+    setTextPos(ceil(x), ceil(y))
+    setTextColor(color.r, color.g, color.b, color.a)
+    drawText(text)
 
-	setTextColor( 0,0,0,color.a )
-	for i=1,passes do
-		setTextPos( ceil( x ), ceil( y ) );
-		drawText(text)
-	end
-	setFont(font);
-	setTextPos( ceil( x ), ceil( y ) );
-	setTextColor( color.r, color.g, color.b, color.a )
-	drawText(text)
-
-	return w, h
+    return w, h
 end

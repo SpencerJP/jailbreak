@@ -29,21 +29,18 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
+local pmeta = FindMetaTable("Player")
 
-
-
-local pmeta = FindMetaTable("Player");
 function pmeta:CanPickupWeapon(entity)
-	if table.Count(self:GetWeapons()) > 0 then
-		for k,v in pairs(self:GetWeapons()) do
-			if v.Slot == entity.Slot or v:GetClass() == entity:GetClass() then
-				return false
-			end
-		end
-	end
+    if table.Count(self:GetWeapons()) > 0 then
+        for k, v in pairs(self:GetWeapons()) do
+            if v.Slot == entity.Slot or v:GetClass() == entity:GetClass() then return false end
+        end
+    end
 
-	return true; 
+    return true
 end
+
 function pmeta:GetWarden()
-	return (JB:GetWarden() == self);
+    return JB:GetWarden() == self
 end

@@ -29,26 +29,25 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
+local LR = JB.CLASS_LR()
+LR:SetName("Airborne Battle")
+LR:SetDescription("The guard and the prisoner both get a Famas rifle and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.")
 
-
-local LR = JB.CLASS_LR();
-LR:SetName("Airborne Battle");
-LR:SetDescription("The guard and the prisoner both get a Famas rifle and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
-LR:SetStartCallback(function(prisoner,guard)
-	for _,ply in ipairs{prisoner,guard} do
-		ply:StripWeapons();
-		ply:Give("weapon_jb_famas");
-		ply:Give("weapon_jb_knife");
-		ply:GiveAmmo(899,"SMG1");
-		ply:SetHealth(100);
-		ply:SetArmor(0);
-	end
+LR:SetStartCallback(function(prisoner, guard)
+    for _, ply in ipairs{prisoner, guard} do
+        ply:StripWeapons()
+        ply:Give("weapon_jb_famas")
+        ply:Give("weapon_jb_knife")
+        ply:GiveAmmo(899, "SMG1")
+        ply:SetHealth(100)
+        ply:SetArmor(0)
+    end
 end)
-LR:SetIcon(Material("icon16/flag_green.png"))
-local this = LR();
 
-hook.Add("PlayerBindPress", "JB.PlayerBindPress.LR.Airborne", function(pl, bind, pressed) // Not the safest way, but it requires the least amount of touching code outside of this file (without using nasty hacky methods)
-	if JB.LastRequest == this and table.HasValue(JB.LastRequestPlayers,pl) and pl:IsOnGround() and string.find( bind,"+attack" ) then
-		return true;
-	end
+LR:SetIcon(Material("icon16/flag_green.png"))
+local this = LR()
+
+-- Not the safest way, but it requires the least amount of touching code outside of this file (without using nasty hacky methods)
+hook.Add("PlayerBindPress", "JB.PlayerBindPress.LR.Airborne", function(pl, bind, pressed)
+    if JB.LastRequest == this and table.HasValue(JB.LastRequestPlayers, pl) and pl:IsOnGround() and string.find(bind, "+attack") then return true end
 end)

@@ -29,9 +29,4 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
-
-
-
-JB.Gamemode.PlayerNoClip = function(gm,p)
-	return p:IsSuperAdmin();
-end
+JB.Gamemode.PlayerNoClip = function(gm, p) return p:IsSuperAdmin() end

@@ -45,6 +45,6 @@ hook.Add( "OnEntityCreated", "JB.OnEntityCreated.InvalidateDefaultWeapons", func
 				object:EnableMotion( true );
 				object:Wake();
 			end
-		end)		
+		end)
 	end
 end)
