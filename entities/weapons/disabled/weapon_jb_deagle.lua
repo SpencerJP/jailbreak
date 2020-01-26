@@ -32,38 +32,37 @@
 
 AddCSLuaFile()
 
-	SWEP.PrintName			= "MP5"
+SWEP.PrintName			= "Desert Eagle"			
 
-
-SWEP.Slot				= 1
+SWEP.Slot				= 2
 SWEP.SlotPos			= 1
-;
-SWEP.HoldType			= "smg"
+
+SWEP.HoldType			= "revolver"
 SWEP.Base				= "weapon_jb_base"
 SWEP.Category			= "Jailbreak Weapons"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
-SWEP.ViewModel			= "models/weapons/cstrike/c_smg_mp5.mdl"
-SWEP.WorldModel			= "models/weapons/w_smg_mp5.mdl"
+SWEP.ViewModel			= "models/weapons/cstrike/c_pist_deagle.mdl"
+SWEP.WorldModel			= "models/weapons/w_pist_deagle.mdl"
 
-SWEP.Weight				= 3
+SWEP.Weight				= 1
 SWEP.AutoSwitchTo		= true
 SWEP.AutoSwitchFrom		= false
 
-SWEP.Primary.Sound			= Sound("Weapon_MP5Navy.Single")
-SWEP.Primary.Recoil			= 0.5
-SWEP.Primary.Damage			= 28
+SWEP.Primary.Sound			= Sound("Weapon_Deagle.Single")
+SWEP.Primary.Recoil			= 2.5
+SWEP.Primary.Damage			= 60
 SWEP.Primary.NumShots		= 1
 SWEP.Primary.Cone			= 0.02
-SWEP.Primary.ClipSize		= 30
-SWEP.Primary.Delay			= 0.11
-SWEP.Primary.DefaultClip	= 60
-SWEP.Primary.Automatic		= true
-SWEP.Primary.Ammo			= "smg1"
+SWEP.Primary.ClipSize		= 8
+SWEP.Primary.Delay			= 0.3
+SWEP.Primary.DefaultClip	= 24
+SWEP.Primary.Automatic		= false
+SWEP.Primary.Ammo			= "pistol"
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
-SWEP.Positions[2] = {pos = Vector(-5.361, -2.757, 1.879), ang = Vector(1.2, 0, 0)};
-SWEP.Positions[3] = {pos = Vector(6.377, -13.938, 0.393), ang = Vector(0,70,0)};
+SWEP.Positions[1] = {pos = Vector(-1.321, -2.283, 0.2), ang = Vector(0,0,0)};
+SWEP.Positions[2] = {pos = Vector(-6.378, -7.954, 2.039), ang = Vector(0.4, 0, 0)};
+SWEP.Positions[3] = {pos = Vector(2.44, -14.882, -20), ang = Vector(70, 0.827, 0)};

@@ -32,40 +32,40 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "M4A1"
+	SWEP.PrintName			= "Glock 18"			
 
-SWEP.Slot				= 1
+
+SWEP.Slot				= 2
 SWEP.SlotPos			= 1
 
-SWEP.HoldType			= "ar2"
+SWEP.HoldType			= "revolver"
 SWEP.Base				= "weapon_jb_base"
 SWEP.Category			= "Jailbreak Weapons"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
-SWEP.ViewModel			= "models/weapons/cstrike/c_rif_m4a1.mdl"
-SWEP.WorldModel			= "models/weapons/w_rif_m4a1.mdl"
+SWEP.ViewModel			= "models/weapons/cstrike/c_pist_glock18.mdl"
+SWEP.WorldModel			= "models/weapons/w_pist_glock18.mdl"
 
-SWEP.Weight				= 3
+SWEP.Weight				= 1
 SWEP.AutoSwitchTo		= true
 SWEP.AutoSwitchFrom		= false
 
-SWEP.Primary.Sound			= Sound("Weapon_M4A1.Single")
-SWEP.Primary.Recoil			= 1
-SWEP.Primary.Damage			= 30
+SWEP.Primary.Sound			= Sound("Weapon_Glock.Single")
+SWEP.Primary.Recoil			= 1.5
+SWEP.Primary.Damage			= 18
 SWEP.Primary.NumShots		= 1
-SWEP.Primary.Cone			= 0.02
+SWEP.Primary.Cone			= 0.01
 SWEP.Primary.ClipSize		= 30
-SWEP.Primary.Delay			= 0.15
-SWEP.Primary.DefaultClip	= 60
-SWEP.Primary.Automatic		= true
-SWEP.Primary.ShootConeAdd	= 0.0065;
-SWEP.Primary.Ammo			= "smg1"
+SWEP.Primary.Delay			= 0.065
+SWEP.Primary.DefaultClip	= SWEP.Primary.ClipSize
+SWEP.Primary.Automatic		= false
+SWEP.Primary.Burst 			= 4
+SWEP.Primary.Ammo			= "pistol"
 
-SWEP.FakeIronSights = true;
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
-SWEP.Positions[2] = {pos = Vector(-7.881, -1.181, 0.239), ang = Vector(2.799, -1.4, -4.6)};
-SWEP.Positions[3] = {pos = Vector(6.534, -9, 0.708), ang = Vector(0,70,0)};
+SWEP.Positions[1] = {pos = Vector(-1.241, 0, 2), ang = Vector(0,0,0)};
+SWEP.Positions[2] = {pos = Vector(-5.761, -2.126, 2.68), ang = Vector(0.699, 0.1, 0)};
+SWEP.Positions[3] = {pos = Vector(0, -15.669, -15.827), ang = Vector(70, 0.275, -0.276)};

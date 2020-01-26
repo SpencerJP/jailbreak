@@ -402,7 +402,6 @@ JB.Gamemode.HUDDrawTargetID = function()
 	ent = LocalPlayer():GetEyeTrace().Entity;
 
 	if (not IsValid(ent) ) then return end;
-
 	text = "ERROR"
 	text_sub = "Something went terribly wrong!";
 

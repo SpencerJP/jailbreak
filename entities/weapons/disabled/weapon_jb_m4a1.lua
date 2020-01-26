@@ -32,38 +32,40 @@
 
 AddCSLuaFile()
 
+SWEP.PrintName			= "M4A1"			
 
-SWEP.PrintName			= "Five-Seven"
-
-SWEP.Slot				= 2
+SWEP.Slot				= 1
 SWEP.SlotPos			= 1
-;
-SWEP.HoldType			= "revolver"
+     
+SWEP.HoldType			= "ar2"
 SWEP.Base				= "weapon_jb_base"
 SWEP.Category			= "Jailbreak Weapons"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
-SWEP.ViewModel			= "models/weapons/cstrike/c_pist_fiveseven.mdl"
-SWEP.WorldModel			= "models/weapons/w_pist_fiveseven.mdl"
+SWEP.ViewModel			= "models/weapons/cstrike/c_rif_m4a1.mdl"
+SWEP.WorldModel			= "models/weapons/w_rif_m4a1.mdl"
 
-SWEP.Weight				= 1
+SWEP.Weight				= 3
 SWEP.AutoSwitchTo		= true
 SWEP.AutoSwitchFrom		= false
 
-SWEP.Primary.Sound			= Sound("Weapon_FiveSeven.Single")
-SWEP.Primary.Recoil			= 1.2
-SWEP.Primary.Damage			= 18
+SWEP.Primary.Sound			= Sound("Weapon_M4A1.Single")
+SWEP.Primary.Recoil			= 1
+SWEP.Primary.Damage			= 30
 SWEP.Primary.NumShots		= 1
 SWEP.Primary.Cone			= 0.02
-SWEP.Primary.ClipSize		= 21
-SWEP.Primary.Delay			= 0.05
-SWEP.Primary.DefaultClip	= 21
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "pistol"
+SWEP.Primary.ClipSize		= 30
+SWEP.Primary.Delay			= 0.15
+SWEP.Primary.DefaultClip	= 60
+SWEP.Primary.Automatic		= true
+SWEP.Primary.ShootConeAdd	= 0.0065;
+SWEP.Primary.Ammo			= "smg1"
+
+SWEP.FakeIronSights = true; 
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
-SWEP.Positions[2] = {pos = Vector(-5.921, -1.339, 3.039), ang = Vector(-0.401, 0.1, 0)};
-SWEP.Positions[3] = {pos = Vector(0, -15.669, -15.827), ang = Vector(70, 0.275, -0.276)};
+SWEP.Positions[1] = {pos = Vector(-4.25, -4.173, 1.08), ang = Vector(2.5, -0.101, 0)};
+SWEP.Positions[2] = {pos = Vector(-7.881, -1.181, 0.239), ang = Vector(2.799, -1.4, -4.6)};
+SWEP.Positions[3] = {pos = Vector(6.534, -9, 0.708), ang = Vector(0,70,0)};

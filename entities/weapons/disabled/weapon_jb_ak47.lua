@@ -30,44 +30,40 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+
 AddCSLuaFile()
 
-	SWEP.PrintName			= "TMP"
+SWEP.PrintName			= "AK-47"			
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
 
-;
-
-SWEP.HoldType			= "pistol"
+SWEP.HoldType			= "ar2"
 SWEP.Base				= "weapon_jb_base"
-SWEP.Category			= "Jailbreak Weapons"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
-SWEP.ViewModel			= "models/weapons/cstrike/c_smg_tmp.mdl"
-SWEP.WorldModel			= "models/weapons/w_smg_tmp.mdl"
+SWEP.ViewModel			= "models/weapons/cstrike/c_rif_ak47.mdl"
+SWEP.WorldModel			= "models/weapons/w_rif_ak47.mdl"
 
 SWEP.Weight				= 3
 SWEP.AutoSwitchTo		= true
 SWEP.AutoSwitchFrom		= false
 
-SWEP.Primary.Sound			= Sound("Weapon_tmp.Single")
-SWEP.Primary.Recoil			= 0.6
-SWEP.Primary.Damage			= 25
+SWEP.Primary.Sound			= Sound("Weapon_AK47.Single")
+SWEP.Primary.Recoil			= 1
+SWEP.Primary.Damage			= 32
 SWEP.Primary.NumShots		= 1
-SWEP.Primary.Cone			= 0.05
-SWEP.Primary.ClipSize		= 25
-SWEP.Primary.Delay			= 0.09
-SWEP.Primary.DefaultClip	= 50
+SWEP.Primary.Cone			= 0.026
+SWEP.Primary.ClipSize		= 30
+SWEP.Primary.Delay			= 0.14
+SWEP.Primary.DefaultClip	= 60
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "smg1"
-
-SWEP.FakeIronSights = true;
-
+SWEP.ReloadSequenceTime 	= 1.85; 	
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
-SWEP.Positions[2] = {pos = Vector(-6.72, 0, 2.64), ang = Vector(-0.401, 0.6, 0)};
-SWEP.Positions[3] = {pos = Vector(7.322, -20, 0), ang = Vector(0,70,0)};
+SWEP.Positions[1] = {pos = Vector(-1.92, -1.56, 1.759), ang = Vector(0.5, 0.5, 0)};
+SWEP.Positions[2] = {pos = Vector(-6.56, -10.08, 2.519), ang = Vector(2.4, 0.1, 0)};
+SWEP.Positions[3] = {pos = Vector(6.534, -15.827, -5.277), ang = Vector(-3.58, 66.97, -26.733)};

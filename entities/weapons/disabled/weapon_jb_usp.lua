@@ -32,79 +32,45 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "AWP Sniper Rifle"
+SWEP.PrintName			= "H&K USP"			
 
-SWEP.Slot				= 1
+SWEP.Slot				= 2
 SWEP.SlotPos			= 1
 
-SWEP.HoldType			= "ar2"
+SWEP.HoldType			= "revolver"
 SWEP.Base				= "weapon_jb_base"
+SWEP.Category			= "Jailbreak Weapons"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
-SWEP.ViewModel			= "models/weapons/cstrike/c_snip_awp.mdl"
-SWEP.WorldModel			= "models/weapons/w_snip_awp.mdl"
+SWEP.ViewModel			= "models/weapons/cstrike/c_pist_usp.mdl"
+SWEP.WorldModel			= "models/weapons/w_pist_usp.mdl"
 
-SWEP.Weight				= 3
+SWEP.Weight				= 1
 SWEP.AutoSwitchTo		= true
 SWEP.AutoSwitchFrom		= false
 
-SWEP.Primary.Sound			= Sound("weapons/awp/awp1.wav")
-SWEP.Primary.Recoil			= 5
-SWEP.Primary.Damage			= 160
+SWEP.Primary.Sound			= Sound("Weapon_USP.Single")
+SWEP.Primary.Recoil			= 0.1
+SWEP.Primary.Damage			= 20
 SWEP.Primary.NumShots		= 1
-SWEP.Primary.Cone			= 0.000001
-SWEP.Primary.ClipSize		= 5
-SWEP.Primary.Delay			= 1.4
-SWEP.Primary.DefaultClip	= 30
+SWEP.Primary.Cone			= 0.02
+SWEP.Primary.ClipSize		= 12
+SWEP.Primary.Delay			= 0.05
+SWEP.Primary.DefaultClip	= 36
 SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "smg1"
+SWEP.Primary.Ammo			= "pistol"
 
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
+SWEP.IronSightsPos = Vector(-2.12, -7.481, 1.6)
+SWEP.IronSightsAng = Vector(0, 0, 0)
+SWEP.IronSightsPos = Vector(-5.881, -7.481, 2.64)
+SWEP.IronSightsAng = Vector(0.1, 0.1, 0)
+SWEP.IronSightsPos = Vector(0.079, -15.355, -20)
+SWEP.IronSightsAng = Vector(70, 0, 0)
 
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
-SWEP.Positions[2] = {pos = Vector(-6.761, -3.859, -12.24), ang = Vector(0,0,0)};
-SWEP.Positions[3] = {pos = Vector(6.534, -14.094, 0.708), ang = Vector(0,70,0)};
-
-function SWEP:TranslateFOV(fov)
-	if self:GetNWMode() == 2 then
-		return 10
-	else
-		return fov
-	end
-end
-
-if CLIENT then
-
-
-	function SWEP:AdjustMouseSensitivity()
-		return self:GetNWMode() == 2 and .08 or 1;
-	end
-
-	local scopeMat = Material("jailbreak_excl/scope.png");
-
-	function SWEP:DrawHUD()
-		if self:GetNWMode() == 2 then
-
-			local size = ScrH();
-
-			surface.SetDrawColor(JB.Color.black)
-
-			surface.DrawRect(0, 0, (ScrW()-size) / 2, size);
-			surface.DrawRect(ScrW() - ((ScrW()-size) / 2), 0, (ScrW()-size) / 2, size);
-
-			surface.DrawLine(0,ScrH()/2,ScrW(),ScrH()/2)
-			surface.DrawLine(ScrW()/2,0,ScrW()/2,ScrH())
-
-			surface.SetDrawColor(JB.Color.black)
-			surface.SetMaterial(scopeMat)
-			surface.DrawTexturedRect( (ScrW()/2) - (size/2) , 0, size, size)
-		end
-	end
-
-end
+SWEP.Positions[1] = {pos = Vector(-2.12, -7.481, 1.6), ang = Vector(0,0,0)};
+SWEP.Positions[2] = {pos = Vector(-5.881, -7.481, 2.64), ang = Vector(0.1, 0.1, 0)};
+SWEP.Positions[3] = {pos = Vector(0.079, -15.355, -20), ang = Vector(70, 0, 0)};
