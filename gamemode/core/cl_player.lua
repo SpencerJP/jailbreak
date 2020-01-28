@@ -66,10 +66,10 @@ function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
 	mulSpeed=Lerp(FrameTime()*5,mulSpeed,math.Clamp((math.Clamp(ply:GetVelocity():Length(),ply:GetWalkSpeed(),ply:GetRunSpeed()) - ply:GetWalkSpeed())/(ply:GetRunSpeed() - ply:GetWalkSpeed()),0,1));
 
 	if ply:KeyDown(IN_SPEED) and JB.Config.sprintViewBob == "1" then
-		count=count+(FrameTime()*8)*mulSpeed;
-		fovSmooth= Lerp(FrameTime()*5,fovSmooth,(fov + mulSpeed * 10 ));
-		angRightSmooth= -math.abs(math.sin(count)*1);
-		angUpSmooth= math.sin(count)*1.5;
+		-- count=count+(FrameTime()*8)*mulSpeed;
+		-- fovSmooth= Lerp(FrameTime()*5,fovSmooth,(fov + mulSpeed * 10 ));
+		-- angRightSmooth= -math.abs(math.sin(count)*1);
+		-- angUpSmooth= math.sin(count)*1.5;
 	else
 		fovSmooth= Lerp(FrameTime()*20,fovSmooth,fov);
 		angRightSmooth= Lerp(FrameTime()*10,angRightSmooth,0);
@@ -86,7 +86,7 @@ end
 
 hook.Add( "PreDrawHalos", "JB.PreDrawHalos.AddHalos", function()
 	if JB.LastRequest ~= "0" and JB.LastRequestPlayers then
-		for k,v in pairs(JB.LastRequestPlayers)do
+		for k,v in pairs(JB.LastRequestPlayers) do
 			if not IsValid(v) or LocalPlayer() == v then continue; end
 
 			halo.Add({v},team.GetColor(v:Team()),1,1,2,true,true);

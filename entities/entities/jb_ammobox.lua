@@ -29,44 +29,43 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
+AddCSLuaFile()
+ENT.Type = "anim"
+ENT.Base = "base_anim"
 
-AddCSLuaFile();
+function ENT:Initialize()
+    if SERVER then
+        self:SetModel("models/Items/item_item_crate.mdl")
+        self:SetUseType(SIMPLE_USE)
+        self:PhysicsInit(SOLID_VPHYSICS)
+        self:SetMoveType(MOVETYPE_VPHYSICS)
+        self:SetSolid(SOLID_VPHYSICS)
+        local phys = self:GetPhysicsObject()
 
-ENT.Type             = "anim"
-ENT.Base             = "base_anim"
-
-function ENT:Initialize()    
-	if SERVER then
-		self:SetModel( "models/Items/item_item_crate.mdl" );
-
-		self:SetUseType(SIMPLE_USE);
-		self:PhysicsInit( SOLID_VPHYSICS )
-		self:SetMoveType(MOVETYPE_VPHYSICS);
-		self:SetSolid(SOLID_VPHYSICS);
-		
-		local phys = self:GetPhysicsObject()
-		if ( IsValid( phys ) ) then
-			phys:Wake()	
-		end
-   
-	end
+        if (IsValid(phys)) then
+            phys:Wake()
+        end
+    end
 end
 
 function ENT:Use(p)
-	if IsValid(p) and (not p.nextAmmoCrate or p.nextAmmoCrate < CurTime()) then
-		p.nextAmmoCrate = CurTime() + 5;
-	
-		p:GiveAmmo(128,"SMG1");
-		p:GiveAmmo(128,"Pistol");
-		
-		p:SendNotification("You picked up an ammo crate");
-		
-		self:Remove();
-	elseif IsValid(p) then
-		p:SendQuickNotification("You already picked up an ammo crate!");
-	end
+    if IsValid(p) and (not p.nextAmmoCrate or p.nextAmmoCrate < CurTime()) then
+        p.nextAmmoCrate = CurTime() + 5
+        p:GiveAmmo(128, "SMG1")
+        p:GiveAmmo(128, "Pistol")
+        p:SendNotification("You picked up an ammo crate")
+        self:Remove()
+    elseif IsValid(p) then
+        p:SendQuickNotification("You already picked up an ammo crate!")
+    end
 end
 
 function ENT:Draw()
-	self:DrawModel();
+    self:DrawModel()
 end
+-- hook.Add("AcceptInput", "splerge_test_hook", function(ent, input, activator, caller, value)
+--     local s1, entname = pcall(function() return ent:GetName() end)
+--     local s2, activatorname = pcall(function() return activator:GetName() end)
+--     local s3, callername = pcall(function() return caller:GetName() end)
+--     print("ent: " .. ((s1 and entname) or "null") .. " input: " .. input .. " activator: " .. ((s2 and activatorname) or "null") .. " caller: " .. ((s3 and callername) or "null"))
+-- end)
