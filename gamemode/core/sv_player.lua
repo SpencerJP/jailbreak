@@ -51,6 +51,8 @@ JB.Gamemode.PlayerSpawn = function(gm,ply)
 	gm.BaseClass.PlayerSpawn(gm,ply);
 
 	ply.originalRunSpeed = ply:GetRunSpeed();
+	
+			
 end;
 
 JB.Gamemode.PlayerDeathThink = function( gm,ply )
@@ -96,17 +98,24 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 
 	victim:SendNotification("You are muted until the round ends")
 
-	if victim.GetWarden and IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden() == victim:GetWarden() then
-		JB:BroadcastNotification("The warden has died")
-		timer.Simple(.5,function()
-			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				if v:Alive() and v ~= victim then
-					JB:BroadcastNotification("Prisoners get freeday");
-					break;
-				end
-			end
-		end);
+	if JB:GetWarden() == victim then
+		sound.Add( {
+	name = "enzo_engine_idle",
+	channel = CHAN_STATIC,
+	volume = 1.0,
+	level = 80,
+	pitch = { 95, 110 },
+	sound = "vehicles/enzo/idle.wav"
+	} )
+
+		JB:BroadcastNotification("The warden has died! It is now a freeday!")
+		for k,v in pairs(player.GetAll()) do
+				v.wardenAlarm = CreateSound(v, "ambient/alarms/alarm_citizen_loop1.wav")
+				v.wardenAlarm:Play()
+				timer.Simple( 4.5, function() v.wardenAlarm:Stop() v.wardenAlarm = nil end)
+		end
 	end
+	
 
 	if IsValid(killer) and killer.IsPlayer and killer:IsPlayer()
 	and	killer:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD
@@ -126,13 +135,12 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 
 	if JB.State == STATE_PLAYING and victim:Team() == TEAM_GUARD and JB:AliveGuards() == 2 and JB:AlivePrisoners() > 3 and not IsValid(JB:GetWarden()) and not JB.ThisRound.notifiedLG and tobool(JB.Config.notifyLG) then
 		JB.ThisRound.notifiedLG = true;
-		JB:BroadcastNotification("Last guard kills all");
+		JB:BroadcastNotification("There is only 1 Guard left");
 	end
 
 	if JB.State == STATE_PLAYING and victim:Team() == TEAM_PRISONER and JB:AlivePrisoners() == 2 and not JB.ThisRound.notifiedLR then
 		JB.ThisRound.notifiedLR = true;
-		JB:BroadcastNotification("The last prisoner now select a last request from the menu (F4).");
-		JB:BroadcastNotification("Custom last requests may only affect the current round!");
+		JB:BroadcastNotification("The last prisoner now may have his last request! (F4)");
 	end
 
 	if JB.State == STATE_LASTREQUEST then
@@ -186,8 +194,8 @@ JB.Gamemode.OnPlayerHitGround = function(gm,ply, in_water, on_floater, speed)
 end
 
 JB.Gamemode.PlayerCanHearPlayersVoice = function( gm, listener, talker )
-	if (not talker:Alive() )
-		or (talker:Team() == TEAM_PRISONER and ((CurTime() - JB.RoundStartTime) < 30)) then return false,false; end
+	if (not talker:Alive() and not talker:IsAdmin())
+		or (talker:Team() == TEAM_PRISONER and ((CurTime() - JB.RoundStartTime) < 60) and (not talker:IsAdmin())) then return false,false; end
 
 	if(talker.GetWarden and talker:GetWarden()) then
 		return true,false;
@@ -286,10 +294,14 @@ end
 function JB.Gamemode:AllowPlayerPickup( ply, object )
     return (ply:Alive() and (JB.State == STATE_PLAYING or JB.State == STATE_SETUP or JB.State == STATE_LASTREQUEST) and IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_ItemPickup());
 end
-
 function JB.Gamemode:PlayerUse( ply, ent )
 	if not ply:Alive() or not (ply:Team() == TEAM_GUARD or ply:Team() == TEAM_PRISONER) then
 		return false
+	end
+	if not ply.nextprint then
+		JB:DamageLog_AddEntUse( ply,ent )
+		ply.nextprint = true
+		timer.Simple(5, function() ply.nextprint = false end)
 	end
 	return true
 end

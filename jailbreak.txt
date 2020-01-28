@@ -2,6 +2,10 @@
 {
 	"base"		"base"
 	"title"		"Jail Break"
-	"maps"		"^jb_"
+	"maps"		"^jb_|^ba_"
 	"menusystem"	"1"
+
+	"settings"
+	{
+	}
 }

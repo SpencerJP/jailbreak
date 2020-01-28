@@ -36,6 +36,26 @@ hook.Add("Initialize","JB.AutomateSpectatorSpawn",function()
     RunConsoleCommand("jb_team_select_spectator");
   end
 end)
+// getfriends command
+	local friendstab = {}
+	
+	usermessage.Hook( "getfriends", function( um )
+	
+		for k, v in pairs( player.GetAll() ) do
+			if v:GetFriendStatus() == "friend" then
+				table.insert( friendstab, v:Nick() )
+			end
+		end
+		
+		net.Start( "sendtable" )
+			net.WriteEntity( um:ReadEntity() )
+			net.WriteTable( friendstab )
+		net.SendToServer()
+		
+		table.Empty( friendstab )
+		
+	end )
+//end getfriends command
 
 function JB.Gamemode:KeyPress( ply, key )
    if ( not IsFirstTimePredicted() ) then return end
@@ -45,48 +65,50 @@ end
 local fovSmooth;
 local mulSpeed,angRightSmooth,angUpSmooth = 0,0,0;
 local count=0;
-function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
-	local ragdoll =  LocalPlayer():GetRagdollEntity();
-    if IsValid(ragdoll) and LocalPlayer():GetObserverMode() == OBS_MODE_NONE then
-        local eyes = ragdoll:GetAttachment( ragdoll:LookupAttachment( "eyes" ) );
 
-		if not eyes then return end
-
-	    local view = {
-	        origin = eyes.Pos,
-	        angles = eyes.Ang,
-			fov = 90,
-	    };
-
-	    return view;
-	end
-
-	if not fovSmooth then fovSmooth = fov end
-
-	mulSpeed=Lerp(FrameTime()*5,mulSpeed,math.Clamp((math.Clamp(ply:GetVelocity():Length(),ply:GetWalkSpeed(),ply:GetRunSpeed()) - ply:GetWalkSpeed())/(ply:GetRunSpeed() - ply:GetWalkSpeed()),0,1));
-
-	if ply:KeyDown(IN_SPEED) and JB.Config.sprintViewBob == "1" then
-		-- count=count+(FrameTime()*8)*mulSpeed;
-		-- fovSmooth= Lerp(FrameTime()*5,fovSmooth,(fov + mulSpeed * 10 ));
-		-- angRightSmooth= -math.abs(math.sin(count)*1);
-		-- angUpSmooth= math.sin(count)*1.5;
-	else
-		fovSmooth= Lerp(FrameTime()*20,fovSmooth,fov);
-		angRightSmooth= Lerp(FrameTime()*10,angRightSmooth,0);
-		angUpSmooth= Lerp(FrameTime()*10,angUpSmooth,0);
-		mulSpeed=0;
-		count=0;
-	end
-
-	ang:RotateAroundAxis(ang:Right(),angRightSmooth * 2);
-	ang:RotateAroundAxis(ang:Up(),angUpSmooth * 2);
-
-	return JB.Gamemode.BaseClass.CalcView(self,ply,pos,ang,fovSmooth, nearZ, farZ);
-end
+--// Disabled because it is an ugly viewmodel sway
+--function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
+--	local ragdoll =  LocalPlayer():GetRagdollEntity();
+--    if IsValid(ragdoll) and LocalPlayer():GetObserverMode() == OBS_MODE_NONE then
+--        local eyes = ragdoll:GetAttachment( ragdoll:LookupAttachment( "eyes" ) );
+--
+--		if not eyes then return end
+--
+--	    local view = {
+--	        origin = eyes.Pos,
+--	        angles = eyes.Ang,
+--			fov = 90,
+--	    };
+--
+--	    return view;
+--	end
+--
+--	if not fovSmooth then fovSmooth = fov end
+--
+--	mulSpeed=Lerp(FrameTime()*5,mulSpeed,math.Clamp((math.Clamp(ply:GetVelocity():Length(),ply:GetWalkSpeed(),ply:GetRunSpeed()) - ply:GetWalkSpeed())/(ply:GetRunSpeed() - ply:GetWalkSpeed()),0,1));
+--
+--	if ply:KeyDown(IN_SPEED) then
+--		count=count+(FrameTime()*8)*mulSpeed;
+--		fovSmooth= Lerp(FrameTime()*5,fovSmooth,(fov + mulSpeed * 10 ));
+--		angRightSmooth= -math.abs(math.sin(count)*1);
+--		angUpSmooth= math.sin(count)*1.5;
+--	else
+--		fovSmooth= Lerp(FrameTime()*20,fovSmooth,fov);
+--		angRightSmooth= Lerp(FrameTime()*10,angRightSmooth,0);
+--		angUpSmooth= Lerp(FrameTime()*10,angUpSmooth,0);
+--		mulSpeed=0;
+--		count=0;
+--	end
+--
+--	ang:RotateAroundAxis(ang:Right(),angRightSmooth * 2);
+--	ang:RotateAroundAxis(ang:Up(),angUpSmooth * 2);
+--
+--	return JB.Gamemode.BaseClass.CalcView(self,ply,pos,ang,fovSmooth, nearZ, farZ);
+--end
 
 hook.Add( "PreDrawHalos", "JB.PreDrawHalos.AddHalos", function()
 	if JB.LastRequest ~= "0" and JB.LastRequestPlayers then
-		for k,v in pairs(JB.LastRequestPlayers) do
+		for k,v in pairs(JB.LastRequestPlayers)do
 			if not IsValid(v) or LocalPlayer() == v then continue; end
 
 			halo.Add({v},team.GetColor(v:Team()),1,1,2,true,true);
@@ -180,8 +202,10 @@ hook.Add("PlayerBindPress", "JB.PlayerBindPress.KeyBinds", function(pl, bind, pr
 		end
 		walking=!walking;
 		return true;
-	elseif string.find(bind,"+voicerecord") and pressed and ((pl:Team() == TEAM_PRISONER and (CurTime() - JB.RoundStartTime) < 30) or (not pl:Alive())) then
-		JB:DebugPrint("You can't use voice chat - you're dead or the round isn't 30 seconds in yet.");
-		return true;
+	elseif string.find(bind,"+voicerecord") and pressed and ((pl:Team() == TEAM_PRISONER and (CurTime() - JB.RoundStartTime) < 30 and (not pl:IsAdmin())) or (not pl:Alive() and not pl:IsAdmin())) then
+		if not pl:Alive() then
+			JB:DebugPrint("You can't use voice chat - you're dead or the round isn't 30 seconds in yet.");
+			return true;
+		end
 	end
 end)

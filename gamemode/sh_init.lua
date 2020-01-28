@@ -40,14 +40,15 @@ local function makeConfig(name,default)
 	return {name=name,default=default};
 end
 
-config.debug = makeConfig("jb_config_debug","0") 
+config.debug = makeConfig("jb_config_debug","1") 
 config.font = makeConfig("jb_config_font","Roboto")
 config.website = makeConfig("jb_config_website","example.com");
 config.maxWardenItems = makeConfig("jb_config_max_warden_items","20");
 config.maxWardenRounds = makeConfig("jb_config_max_warden_rounds","3");
 config.joinTime = makeConfig("jb_config_jointime","20"); 
 config.setupTime = makeConfig("jb_config_setuptime","60"); 
-config.guardsAllowed = makeConfig("jb_config_guards_allowed","30");
+-- Disabled because it conflicts with the new auto team balance
+-- config.guardsAllowed = makeConfig("jb_config_guards_allowed","30");
 config.rebelSensitivity = makeConfig("jb_config_rebel_sensitivity","2");
 config.guardPlaytime = makeConfig("jb_config_guards_playtime","120");
 config.prisonerNameChange = makeConfig("jb_config_prisoners_namechange","0");
@@ -56,8 +57,6 @@ config.prisonerSpecialChance = makeConfig("jb_config_prisoner_special_chance","1
 config.knivesAreConcealed = makeConfig("jb_config_knives_are_concealed","1");
 config.roundsPerMap = makeConfig("jb_config_rounds_per_map","9999");
 config.notifyLG = makeConfig("jb_config_notify_lastguard",1);
-config.guardStartsWithWeapons = makeConfig("jb_config_guard_starts_with_weapons","1"); -- guard only has fists, that way they can easily choose weapons
-config.sprintViewBob = makeConfig("jb_config_sprint_view_bob","1"); -- disable view bob
 
 -- meta stuff
 JB = {}
@@ -89,7 +88,7 @@ setmetatable(JB.Config,{
 		if config[key] then
 			if SERVER then
 				local val = GetConVarString(config[key].name);
-				return val and val ~= "" and val or config[key] and config[key].default or "0";
+				return val and val != "" and val or config[key] and config[key].default or "0";
 			elseif CLIENT then
 				return config[key].v or config[key].default;
 			end

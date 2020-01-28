@@ -32,19 +32,21 @@
 
 
 
-hook.Add( "OnEntityCreated", "JB.OnEntityCreated.InvalidateDefaultWeapons", function( entity )
-	if string.lower( string.Left( entity:GetClass(), 6 ) ) == "weapon" or entity:IsWeapon() then
-		timer.Simple( 0, function()
-			if not IsValid( entity ) then return end
-			entity.IsDropped = true;
-			entity.BeingPickedUp = false;
+hook.Add("OnEntityCreated","JB.OnEntityCreated.InvalidateDefaultWeapons",function(e)
+	if string.lower(string.Left(e:GetClass(),6)) == "weapon" or e:IsWeapon() then
+		e.IsDropped = true;
+		e.BeingPickedUp = false;
+		timer.Simple(0,function()
+			if not IsValid(e) then return end
+			e.IsDropped = true;
+			e.BeingPickedUp = false;
 
-			local object = entity:GetPhysicsObject();
-			if object and IsValid( object ) then
-				object:EnableGravity( true );
-				object:EnableMotion( true );
-				object:Wake();
+			local phys = e:GetPhysicsObject();
+			if phys and IsValid(phys) then
+				phys:EnableGravity(true);
+				phys:EnableMotion(true);
+				phys:Wake();
 			end
-		end)		
+		end)
 	end
 end)

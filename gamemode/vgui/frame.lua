@@ -32,7 +32,7 @@
 
 
 /* backup of old vgui
-local matGradient = Material("materials/jailbreak_excl/gradient.png");
+local matGradient = Material("materials/jailbreak_excl/gradient.png"); 
 local matClose = Material("materials/jailbreak_excl/vgui_close.png");
 local matCloseHover = Material("materials/jailbreak_excl/vgui_close_hover.png");
 
@@ -56,7 +56,7 @@ local PNL = {};
 AccessorFunc(PNL,"title","Title",FORCE_STRING);
 function PNL:Init()
 	self:SetTitle("Example title");
-
+	
 	self.CloseButton = vgui.Create("JB.Frame.CloseButton",self)
 	self.CloseButton:SetSize(32,32);
 	self.CloseButton.OnMouseReleased = function()
@@ -68,21 +68,21 @@ function PNL:PerformLayout()
 end
 function PNL:Paint(w,h)
 	draw.RoundedBox(8,0,0,w,h,JB.Color.black);
-
+	
 	draw.RoundedBoxEx(6,2,2,w-4,28,JB.Color["#BBB"],true,true);
-
+	
 	draw.SimpleText(string.upper(self:GetTitle()),"JBNormal",13,30/2+1,color_white_shadow,0,1);
 	draw.SimpleText(string.upper(self:GetTitle()),"JBNormal",12,30/2,JB.Color["#222"],0,1);
-
+	
 	surface.SetDrawColor(color_white_shadow);
 	surface.DrawRect(2,29,w-4,1);
-
+	
 	surface.SetDrawColor(Color(0,0,0,120));
 	surface.SetMaterial(matGradient);
 	surface.DrawTexturedRectRotated(w/2,30 - 20/2,w-4,20,180);
-
+			
 	draw.RoundedBoxEx(6,2,32,w-4,h-32-2,JB.Color["#444"],false,false,true,true);
-
+	
 	surface.SetDrawColor(Color(0,0,0,120));
 	surface.SetMaterial(matGradient);
 	local h_grad = math.Clamp(h-30-2-8,0,256);
@@ -102,7 +102,7 @@ surface.CreateFont("JBWindowTitleShadow",{
 	blursize =2
 })
 
-local matGradient = Material("materials/jailbreak_excl/gradient.png");
+local matGradient = Material("materials/jailbreak_excl/gradient.png"); 
 local matClose = Material("materials/jailbreak_excl/vgui_close.png");
 local matCloseHover = Material("materials/jailbreak_excl/vgui_close_hover.png");
 
@@ -137,6 +137,7 @@ Paint = function(self,w,h)
 	surface.SetDrawColor(color_gradient_bottom);
 	surface.SetMaterial(matGradient);
 	surface.DrawTexturedRect(2,2,w-4,h-4);
+
 end
 },"Panel");
 
@@ -144,9 +145,9 @@ local PNL = {};
 AccessorFunc(PNL,"title","Title",FORCE_STRING);
 function PNL:Init()
 	self:SetTitle("Example title");
-
+	
 	self.CloseButton = vgui.Create("JB.Frame.CloseButton",self)
-	self.CloseButton:SetSize(20,20);
+	self.CloseButton:SetSize(32,12);
 	self.CloseButton.OnMouseReleased = function()
 		self:Remove();
 	end

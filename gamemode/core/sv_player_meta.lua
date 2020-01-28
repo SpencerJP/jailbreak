@@ -45,9 +45,9 @@ function pmeta:AddRebelStatus()
 	if self:Team() ~= TEAM_PRISONER or not self:Alive() then
 		return
 	end
-
+	
 	self:SetRebel(true);
-
+	
 	JB:BroadcastNotification(self:Nick().." is rebelling!");
 
 	self:SetPlayerColor(Vector(1,0,0));
@@ -57,9 +57,9 @@ function pmeta:RemoveRebelStatus()
 	if not self.SetRebel then
 		return
 	end
-
+	
 	self:SetRebel(false);
-
+	
     self:SetPlayerColor(Vector(.9,.9,.9));
 	self:SetWeaponColor(Vector(.9,.9,.9));
 end
@@ -70,15 +70,16 @@ function pmeta:AddWardenStatus()
 		return
 	end
 
-	self:SetModel("models/player/barney.mdl")
-	self:SetArmor(100)
+	self:SetModel("models/poseidonservers/pswarden/poseidon_warden_male02.mdl")
+	--self:SetModel("models/player/barney.mdl")
 	JB.TRANSMITTER:SetJBWarden(self);
-
+	
 end
 function pmeta:RemoveWardenStatus()
 	if not self:Alive() and IsValid(JB.TRANSMITTER) then return end
-
-	self:SetModel("models/player/police.mdl")
+	
+	self:SetModel("models/poseidonservers/psguard/poseidon_guard_male01.mdl")
+	--self:SetModel("models/player/police.mdl")
 	JB.TRANSMITTER:SetJBWarden(NULL);
 end
 function pmeta:SetupHands( ply )

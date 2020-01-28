@@ -36,43 +36,8 @@ if IsValid(clientModels["weapon_jb_knife"]) then
 	clientModels["weapon_jb_knife"]:SetNoDraw(true);
 end
 
-local primWeps = {
-	"weapon_jb_weapon_jb_ak47",
-	"weapon_jb_awp",
-	"weapon_jb_m3",
-	"weapon_jb_m4a1",
-	"weapon_jb_mp5navy",
-	"weapon_jb_scout",
-	"weapon_jb_scout_ns",
-	"weapon_jb_tmp",
-	"weapon_jb_awp",
-	"weapon_jb_famas",
-	"weapon_jb_galil",
-	"weapon_jb_mac10",
-	"weapon_jb_p90",
-	"weapon_jb_sg552",
-	"weapon_jb_ump",
-	"bb_ak47",
-	"bb_aug",
-	"bb_awp",
-	"bb_deagle",
-	"bb_famas",
-	"bb_fiveseven",
-	"bb_m4a1",
-	"bb_galil",
-	"bb_scout",
-	"bb_ump",
-	"bb_ump45",
-	"bb_p90",
-	"bb_sg552",
-	"bb_xm1014"
-
-};
-local secoWeps = {"weapon_jb_deagle","weapon_jb_fiveseven","weapon_jb_glock","weapon_jb_usp", 
-	"bb_usp",
-	"bb_glock",
-	"bb_p228",
-	"bb_tmp",};
+local primWeps = {"weapon_jb_ak47","weapon_jb_awp","weapon_jb_m3","weapon_jb_m4a1","weapon_jb_mp5navy","weapon_jb_scout","weapon_jb_scout_ns","weapon_jb_tmp","weapon_jb_awp","weapon_jb_famas","weapon_jb_galil","weapon_jb_mac10","weapon_jb_p90","weapon_jb_sg552","weapon_jb_ump"};
+local secoWeps = {"weapon_jb_deagle","weapon_jb_fiveseven","weapon_jb_glock","weapon_jb_usp"};
 
 local wmeta = FindMetaTable("Weapon");
 function wmeta:IsPrimary()
@@ -96,7 +61,7 @@ end
 hook.Add("PostPlayerDraw","JB.PostPlayerDraw.DrawWeapons",function(p)
 	local weps = p:GetWeapons();
 
-	for k, v in pairs(weps) do
+	for k, v in pairs(weps)do
 		local mdl = clientModels[v:GetClass()];
 		if IsValid(mdl) and p:GetActiveWeapon() and p:GetActiveWeapon():IsValid() and p:GetActiveWeapon():GetClass() ~= v:GetClass() then
 			if v:IsSecondary() then
@@ -105,7 +70,7 @@ hook.Add("PostPlayerDraw","JB.PostPlayerDraw.DrawWeapons",function(p)
 					local pos, ang = p:GetBonePosition(boneindex)
 
 					ang:RotateAroundAxis(ang:Forward(),90)
-					mdl:SetRenderOrigin(pos + (ang:Right() * 4) + (ang:Up() * -4));
+					mdl:SetRenderOrigin(pos+(ang:Right()*4)+(ang:Up()*-4));
 					mdl:SetRenderAngles(ang);
 					mdl:DrawModel();
 				end

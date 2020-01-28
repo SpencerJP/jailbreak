@@ -31,40 +31,54 @@
 -- ####################################################################################
 
 
-local randomQuestions = {
+JB.randomQuestions = {
 	{ // Questions about the Jail Break gamemode
-		{question="Who created the first version of Jail Break for Garry's Mod?",answer="excl"},
 		{question="What does LR stand for?",answer="last request"},
 		{question="Who is the person in charge of the prison?",answer="warden"},
+		{question="What does KOS stand for?",answer="kill on sight"},
+		{question="What does AFK stand for?",answer="away from keyboard"},
+		{question="What does FRLR stand for?",answer="first reaction last reaction"},
+		{question="What year was Poseidon founded? Hint: not 1999",answer="2012"},
+		{question="Name the gMod gamemode in which everyone is a terrorist.",answer="TTT"},
+		{question="Name the gMod gamemode in which you can watch youtube.",answer="Cinema"},
 	},
 	{ // Questions about internet culture, games, etc...
-		{question="In the game ‘Metal Gear Solid’,who is the twin brother of Solid Snake?",answer="Liquid Snake"},
 		{question="In video gaming, what is the name of the princess whom Mario repeatedly stops Bowser from kidnapping?",answer="Princess Peach"},
 		{question="In the game ‘Mortal Kombat’, what phrase is heard when Scorpion uses his spear?",answer="Get over here"},
-		{question="What is the name of the gang member that video game ‘Grand Theft Auto: San Andreas’ revolves around?",answer="CJ"},
-		{question="How many rows of aliens are there usually at the start of a ‘Space Invaders’ game?",answer="5"},
-		{question="How many square blocks is each game piece composed of in the game of ‘Tetris’?",answer="4"},
-		{question="What is the name of the fictional English archaeologist in the game ‘Tomb Raider’?",answer="Lara Croft"},
-		{question="In the game ‘Doom’, which planet is the space marine posted to after assaulting his commanding officer?",answer="Mars"},
-		{question="Which Playstation 2 game, released in 2003, was banned by several countries and implicated by the media in a murder, due to its graphic violence?",answer="Manhunt"},
-		{question="Which 1997 Playstation game’s opening song is a Chemical Brothers remix of the Manic Street Preachers song ‘Everything Must Go’?",answer="Gran Turismo"},
-		{question="Which 1986 Nintendo game is set in the fantasy land of Hyrule, and centres on a boy named Link?",answer="Zelda"},
 		{question="In video games, what colour is Pac-Man?",answer="yellow"},
 		{question="‘Black Ops’ is the subtitle of which game?",answer="Call of Duty"},
 		{question="Pikachu is one of the species of creatures in which series of games?",answer="Pokemon"},
 		{question="Jumpman’s goal is to save the Lady from the giant ape in which 1981 arcade game?",answer="Donkey Kong"},
+		{question="What is the name of the Mario franchise's first fully 3D game?",answer="Super Mario 64"},
 		{question="The Covenant are fictional military alien races in which game series?",answer="Halo"},
 		{question="What color is the most autistic video game hedgehog?",answer="blue"},
+		{question="What's the name of the internet's most controversial imageboard forum?",answer="4chan"},
+		{question="What year was Grand Theft Auto: San Andreas released?",answer="2004"},
 	},
 	{ // Questions about human subjects, such as history and geography 
-		{question="Name a game in which two teams kick a ball around.",answer="football"},
-		{question="Who wrote Julius Caesar, Macbeth and Hamlet?",answer="Shakespeare"},
-		{question="When was Elvis' first ever concert?",answer="1954"},
+		{question="Name a game in which two teams kick a ball around.",answer="soccer"},
+		{question="Name a game in which two teams dribble a ball around.",answer="basketball"},
+		{question="Name a game in which you can't move while holding the ball.",answer="netball"},
+		{question="Which American state was nearest to the Soviet Union? Hint: Not attached to the mainland",answer="Alaska"},
+		{question="What is converted into alcohol during brewing?",answer="Sugar"},
 		{question="In which city is Hollywood?",answer="Los Angeles"},
-		{question="Who was the director of the film 'Psycho'?",answer="Hitchcock"},
-		{question="What's the smallest country in the world?",answer="Vatican City"},
-		{question="What's the capital of Finland?",answer="Helsinki"},
+		{question="In which city did the Twin Towers stand?",answer="New York"},
+		{question="In which country would you find the Mona Lisa painting?",answer="France"},
+		{question="What's the smallest state in Australia?",answer="Tasmania"},
+		{question="What's the biggest state in Australia?",answer="Western Australia"},
+		{question="What's the capital city of Australia?",answer="Canberra"},
+		{question="What does SOS stand for?",answer="Save our souls"},
+		{question="What do you call a group of crows?",answer="Murder"},
+		{question="What is the nearest galaxy to our own?",answer="Andromeda"},
+		{question="What is the nearest planet to our sun?",answer="Mercury"},
 		{question="How many legs has a spider got?",answer="8"},
+		{question="In which 1979 film was the spaceship called Nostromo? Hint: Facehuggers, horror film ",answer="Alien"},
+		{question="What year did the Vietnamese war start?",answer="1955"},
+		{question="In Roman mythology, Neptune is the equivalent to which Greek god?",answer="Poseidon"},
+		{question="How many cents does a 30c cone at McDonalds cost?",answer="30"},
+		{question="Ayers Rock in Australia is also known as what?",answer="Uluru"}
+		{question="How many horns did Triceratops have?",answer="3"}
+
 	},
 	"mathproblem"
 };
@@ -78,7 +92,7 @@ local LR = JB.CLASS_LR();
 LR:SetName("Trivia");
 LR:SetDescription("After the countdown, a random question about a random subject will be asked. The first person to answer this question correctly in chat will win the last request, the loser will be killed.");
 LR:SetStartCallback(function(prisoner,guard)
-	local subject = randomQuestions[math.random(1,#randomQuestions)];
+	local subject = JB.randomQuestions[math.random(1,#JB.randomQuestions)];
 	
 	if type("subject") == "string" and subject == "mathproblem" then
 		local operationsFirst = {" + "," - "};
@@ -152,7 +166,7 @@ if SERVER then
 			end);
 
 			for k,v in ipairs(JB.LastRequestPlayers)do
-				if IsValid(v) and v ~= ply then
+				if IsValid(v) and v != ply then
 					v:Kill();
 				end
 			end
