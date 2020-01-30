@@ -55,11 +55,11 @@ end
 
 
 function JB:DamageLog_AddEntityTakeDamage( p,dmg )
-	if ( IsValid(p) and p:IsPlayer() and dmg:GetDamage() != 0) then
+	if ( IsValid(p) and p:IsPlayer() and dmg:GetDamage() ~= 0) then
 		if not JB.ThisRound.Logs then
 			JB.ThisRound.Logs = {};
 		end
-		
+
 		local message={};
 
 		local subject=p;
@@ -93,7 +93,7 @@ function JB:DamageLog_AddEntityTakeDamage( p,dmg )
 		if IsValid(inf) and not (inf.IsPlayer and inf:IsPlayer()) then
 			table.insert(message," by a '"..inf:GetClass().."' entity");
 		end
-		
+
 		table.insert(message,JB.Color.white);
 		table.insert(message,".");
 
@@ -109,39 +109,11 @@ function JB:DamageLog_AddEntityTakeDamage( p,dmg )
 		table.insert(JB.ThisRound.Logs,log)
 	end
 end
-
-function JB:DamageLog_AddEntUse( p,ent )
-	if ( IsValid(p) and p:IsPlayer() and ent:IsValid()) then
-		if not JB.ThisRound.Logs then
-			JB.ThisRound.Logs = {};
-		end
-		local message={};
-
-		local subject=p;
-		table.insert(message,team.GetColor(p:Team()));
-		table.insert(message,p:Nick());
-		table.insert(message,JB.Color.white);
-		table.insert(message," ("..p:SteamID()..")")
-		table.insert(message," has pressed USE on the entity ")
-		table.insert(message,ent:GetClass())
-
-		local timerText = (state == STATE_IDLE and "WAITING" or state == STATE_ENDED and "ENDED" or state == STATE_MAPVOTE and "MAPVOTE" or convertTime(60*(state == STATE_LASTREQUEST and 3 or 10) - (CurTime() - JB.RoundStartTime)) );
-
-		local log={
-			kind="USE",
-			time=timerText,
-			message=message,
-			subject=subject
-		}
-		table.insert(JB.ThisRound.Logs,log)
-	end	
-end
-
 function JB:DamageLog_AddPlayerDeath(p, weapon, killer)
 	if not JB.ThisRound.Logs then
 		JB.ThisRound.Logs = {};
 	end
-		
+
 	local message={};
 
 	local subject=p;
@@ -185,7 +157,7 @@ function JB:DamageLog_AddPlayerPickup( p,class )
 	if not JB.ThisRound.Logs then
 		JB.ThisRound.Logs = {};
 	end
-		
+
 	local message={};
 
 	table.insert(message,team.GetColor(p:Team()));
@@ -208,7 +180,7 @@ function JB:DamageLog_AddPlayerDrop( p,class )
 	if not JB.ThisRound.Logs then
 		JB.ThisRound.Logs = {};
 	end
-		
+
 	local message={};
 
 	table.insert(message,team.GetColor(p:Team()));

@@ -67,33 +67,35 @@ function JB.Gamemode.JailBreakStartMapvote(rounds_passed,extentions_passed) // h
 	return false // return true in your own mapvote function, else there won't be a pause between rounds!
 end
 
-//nvar = ulx.convar( "Round Time ", Round_Time_Enabled, "<0-1> - Set this to 0 if you want to disable the variable round time.", ULib.ACCESS_SUPERADMIN)
-
-function JB:GetRoundTime()
-	if game.GetMap() == "jb_new_summer_v2" then
-		return 8.01
-	end
-	if #player.GetAll() > 28 then
-		return 12
-	elseif #player.GetAll() > 10 and #player.GetAll() <= 28 then
-		return 10
-	else
-		return 8
-	end
-end
 /*
 
 State chaining
 
 */
-local function chainState(state,stateTime,stateCallback)
-	JB.State = state;
+local chainState;
+if SERVER then
+	local stateTime = 0;
+	local stateCallback;
+	hook.Add("Think","JB.Think.StateLogic",function()
+		if stateTime > 0 and stateTime < CurTime() then
+			JB:DebugPrint("State chain ended")
 
-	if timer.Exists("JB.StateTimer") then
-		timer.Remove("JB.StateTimer");
+			stateTime = 0
+			stateCallback()
+		end
+	end)
+	chainState=function(state,time,callback)
+		JB:DebugPrint("State chained: "..tostring(state).." ["..tostring(time).." s]["..tostring(callback).."]")
+
+		JB.State = state;
+
+		stateTime=CurTime()+time;
+		stateCallback=callback;
 	end
 
-	timer.Create("JB.StateTimer",stateTime,1,stateCallback);
+	concommand.Add("testtime",function()
+		print(stateTime,CurTime(),stateTime<CurTime())
+	end)
 end
 
 /*
@@ -110,12 +112,11 @@ function JB:Mapvote_ExtendCurrentMap() 		// You can call this from your own admi
 	end);
 end
 function JB:Mapvote_StartMapVote()			// You can call this from your admin mod/mapvote to initiate a mapvote.
---	if hook.Call("JailBreakStartMapvote",JB.Gamemode,JB.RoundsPassed,ententionsDone) then
---		JB.State = STATE_MAPVOTE;
---		return true;
---	end
---	return false;
-	RunConsoleCommand("mapvote_force_vote")
+	if hook.Call("JailBreakStartMapvote",JB.Gamemode,JB.RoundsPassed,ententionsDone) then
+		JB.State = STATE_MAPVOTE;
+		return true;
+	end
+	return false;
 end
 
 /*
@@ -160,28 +161,22 @@ if SERVER then
 			game.ConsoleCommand("sv_gravity 200;\n")
 			game.ConsoleCommand("sv_friction 3;\n")
 
-			for k,v in pairs(team.GetPlayers(TEAM_PRISONER))do
-				timer.Simple(5, function() v:SetJumpPower(400)
-					v:StripWeapons()
-					v:Give("weapon_jb_knife")
-				end)
+			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
+				v:SetJumpPower(400)
+				v:StripWeapons()
+				v:Give("weapon_jb_knife")
 			end
 
-			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				timer.Simple(5, function() 
-					v:SetJumpPower(400)
-					v:StripWeapons()
-					v:Give("weapon_jb_knife")
-				end)
+			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
+				v:SetJumpPower(400)
+				v:StripWeapons()
+				v:Give("weapon_jb_knife")
 			end
 
-			for k,v in pairs(ents.GetAll())do
+			for k,v in ipairs(ents.GetAll())do
 				if IsValid(v) and v.GetClass and string.Left(v:GetClass(),string.len("weapon_jb_")) == "weapon_jb_" and v:GetClass() ~= "weapon_jb_knife" then
 					v:Remove()
 				end
-				if IsValid(v) and v.GetClass and string.Left(v:GetClass(),string.len("weapon_")) == "weapon_" and v:GetClass() ~= "weapon_knife" then
-					v:Remove()
-				end
 			end
 
 			for k,v in ipairs(ents.FindByClass("func_door"))do
@@ -194,36 +189,10 @@ if SERVER then
 				v:Fire("Open",1)
 			end
 		end,
-		["Big Guards"] = function()
-			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				timer.Simple(5, function() 
-					local scale = 1.8
-					v.MOREViewOffset = v.MOREViewOffset or v:GetViewOffset()
-					v.MOREViewOffsetDucked = v.MOREViewOffsetDucked or v:GetViewOffsetDucked()
-		
-					v:SetViewOffset(v.MOREViewOffset*scale)
-					v:SetViewOffsetDucked(v.MOREViewOffsetDucked*scale)
-					v:SetModelScale( scale )
-				end)
-			end
-
-			for k,v in ipairs(ents.FindByClass("func_door"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
-				v:Fire("Open",1)
-			end
-		end,
-
 		["Guns for everyone"] = function()
 			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				timer.Simple(5, function()
 				v:Give("weapon_jb_deagle")
 				v:SelectWeapon("weapon_jb_deagle")
-				end)
 			end
 
 			for k,v in ipairs(ents.FindByClass("func_door"))do
@@ -238,11 +207,9 @@ if SERVER then
 		end,
 		["Super heros"] = function()
 			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				timer.Simple(5, function()
-					v:SetRunSpeed(600)
-					v:SetWalkSpeed(270)
-					v:SetJumpPower(400)
-				end)
+				v:SetRunSpeed(600)
+				v:SetWalkSpeed(270)
+				v:SetJumpPower(400)
 			end
 
 			for k,v in ipairs(ents.FindByClass("func_door"))do
@@ -257,10 +224,8 @@ if SERVER then
 		end,
 		["Slow guards"] = function()
 			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-				timer.Simple(5, function()
 				v:SetRunSpeed(100)
 				v:SetWalkSpeed(100)
-				end)
 			end
 
 			for k,v in ipairs(ents.FindByClass("func_door"))do
@@ -285,7 +250,6 @@ JB.ThisRound = {};
 local wantStartup = false;
 function JB:NewRound(rounds_passed)
 	rounds_passed = rounds_passed or JB.RoundsPassed;
-	collectgarbage("collect");
 
 	JB.ThisRound = {};
 
@@ -298,7 +262,7 @@ function JB:NewRound(rounds_passed)
 
 		chainState(STATE_SETUP,tonumber(JB.Config.setupTime),function()
 			JB:DebugPrint("Setup finished, round started.")
-			chainState(STATE_PLAYING,(JB:GetRoundTime()*60) - tonumber(JB.Config.setupTime),function()
+			chainState(STATE_PLAYING,(600) - tonumber(JB.Config.setupTime),function()
 				JB:EndRound();
 			end);
 
@@ -308,7 +272,7 @@ function JB:NewRound(rounds_passed)
 			end
 		end);
 
-		if JB.RoundsPassed == 1  then
+		if JB.RoundsPassed == 1 then
 			local count=table.Count(JB.SpecialDays)
 			local which=math.random(1,count)
 			count=0;
@@ -331,25 +295,10 @@ function JB:NewRound(rounds_passed)
 		if IsValid(JB.TRANSMITTER) then
 			JB.TRANSMITTER:SetJBWarden_PVPDamage(false);
 			JB.TRANSMITTER:SetJBWarden_ItemPickup(false);
-			JB.TRANSMITTER:SetJBWarden_ScaleMode(false);
 			JB.TRANSMITTER:SetJBWarden_PointerType("0");
 			JB.TRANSMITTER:SetJBWarden(NULL);
 		end
-		for k, v in pairs( player.GetAll() ) do
-			if v:IsValid() then
-					local scale = 1
-					v.MOREViewOffset = v.MOREViewOffset or v:GetViewOffset()
-					v.MOREViewOffsetDucked = v.MOREViewOffsetDucked or v:GetViewOffsetDucked()
-		
-					v:SetViewOffset(v.MOREViewOffset*scale)
-					v:SetViewOffsetDucked(v.MOREViewOffsetDucked*scale)
-					v:SetModelScale( scale )
-					v:SetWalkSpeed(v.OriginalWalkSpeed or 260)
-					v:SetRunSpeed(v.OriginalRunSpeed or 320)
-					v:SetJumpPower(200)
-					v:SetColor(Color(255,255,255));
-			end
-		end
+
 		JB:BalanceTeams()
 
 		JB.Util.iterate(player.GetAll()):SetRebel(false):Spawn();
@@ -361,7 +310,7 @@ function JB:NewRound(rounds_passed)
 	elseif CLIENT and IsValid(LocalPlayer()) then
 		notification.AddLegacy("Round "..rounds_passed,NOTIFY_GENERIC);
 
-		--LocalPlayer():ConCommand("-voicerecord");
+		LocalPlayer():ConCommand("-voicerecord");
 	end
 
 	hook.Call("JailBreakRoundStart",JB.Gamemode,JB.RoundsPassed);
@@ -404,7 +353,7 @@ if CLIENT then
 		end
 	end);
 elseif SERVER then
-	timer.Create("JB.Time.RoundEndLogic",1,0,function()
+	timer.Create("JBRoundEndLogic",1,0,function()
 		if JB.State == STATE_IDLE and wantStartup then
 			if #team.GetPlayers(TEAM_GUARD) >= 1 and #team.GetPlayers(TEAM_PRISONER) >= 1 then
 				JB:DebugPrint("State is currently idle, but people have joined; Starting round 1.")
@@ -444,9 +393,9 @@ hook.Add("InitPostEntity","JB.InitPostEntity.SpawnStateTransmit",function()
 		end);
 	elseif CLIENT then
 		timer.Simple(0,function()
-			notification.AddLegacy("Welcome to Poseidon Jailbreak!",NOTIFY_GENERIC);
+			notification.AddLegacy("Welcome to Jail Break 7",NOTIFY_GENERIC);
 			if JB.State == STATE_IDLE then
-				notification.AddLegacy("The round will start once everyone has had a chance to join",NOTIFY_GENERIC);
+				notification.AddLegacy("The round will start once everyone had a chance to join",NOTIFY_GENERIC);
 			elseif JB.State == STATE_PLAYING or JB.State == STATE_LASTREQUEST then
 				notification.AddLegacy("A round is currently in progress",NOTIFY_GENERIC);
 				notification.AddLegacy("You will spawn when the current ends",NOTIFY_GENERIC);

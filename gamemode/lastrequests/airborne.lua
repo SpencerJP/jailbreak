@@ -33,7 +33,7 @@
 
 local LR = JB.CLASS_LR();
 LR:SetName("Airborne Battle");
-LR:SetDescription("The guard and the prisoner both get a Shotgun and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
+LR:SetDescription("The guard and the prisoner both get a Famas rifle and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
 LR:SetStartCallback(function(prisoner,guard)
 	for _,ply in ipairs{prisoner,guard} do
 		ply:StripWeapons();

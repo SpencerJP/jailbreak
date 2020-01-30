@@ -40,9 +40,9 @@ WEAPON_PISTOL=4;
 // Quick hack to fix pickup bug.
 local oldRegister = weapons.Register;
 function weapons.Register(tab,class)
-	if tab and tab.Primary and tab.Base and tab.Base == "weapon_jb_base" then
+	if tab and tab.Primary and tab.Base and (tab.Base == "weapon_jb_base" or tab.Base == "bobs_gun_base") then
 		tab.Primary.DefaultClip	= tab.Primary.ClipSize or 0;
-		JB:DebugPrint("Registered JailBreak weapon: "..class);
+		JB:DebugPrint("Registered JailBreak weapon: " .. class);
 	end
 	return oldRegister(tab,class);
 end

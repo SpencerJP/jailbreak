@@ -122,7 +122,7 @@ vgui.Register("JBNoticePanel",{
 		end
 		
 		self:SetWide(self.distanceBrackets + (bracket_wide * 2));
-		self:SetPos(ScrW()/2 - self:GetWide()/2, ScrH()/10 * 2);
+		self:SetPos(ScrW()/2 - self:GetWide()/2, ScrH()/10 * 3);
 	end,
 	Paint = function(self,w,h)	
 		surface.SetDrawColor(self.colorBrackets);

@@ -43,25 +43,12 @@ JB.Gamemode.CreateTeams = function()
 end
 
 -- Utility functions
--- This is modified because Excl's doesn't work.
-JB.Config.guardsAllowed = CreateConVar( "jb_config_guards_allowed", "3", FCVAR_ARCHIVE, " Ratio of guards allowed" )
 function JB:GetGuardsAllowed()
     if #team.GetPlayers(TEAM_GUARD) <= 0 then
         return 1;
     end
-	if #team.GetPlayers(TEAM_PRISONER) <= 0 then
-        return 1;
-    end
-	return math.ceil(team.NumPlayers(TEAM_PRISONER) / JB.Config.guardsAllowed:GetInt());
+    return math.ceil((#team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER)) * (tonumber(JB.Config.guardsAllowed)/100));
 end
-
--- Excl's non working team balancer
---function JB:GetGuardsAllowed()
-    --if #team.GetPlayers(TEAM_GUARD) <= 0 then
-        --return 1;
-    --end
-    --return math.ceil((#team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER)) * (tonumber(JB.Config.guardsAllowed)/100));
---end
 
 function JB:BalanceTeams()
 	if ( #team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER) ) <= 1 then return end

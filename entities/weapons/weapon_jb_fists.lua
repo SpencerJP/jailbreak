@@ -224,7 +224,10 @@ function SWEP:OnRemove()
 
 	if ( IsValid( self.Owner ) ) then
 		local vm = self.Owner:GetViewModel()
-		if ( IsValid( vm ) ) then vm:SetMaterial( "" ) end
+		if ( IsValid( vm ) ) then
+			vm:SendViewModelMatchingSequence( vm:LookupSequence( "fists_holster" ) )
+			vm:SetMaterial( "" )
+		end
 	end
 
 end

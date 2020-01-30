@@ -140,7 +140,7 @@ function JB.MENU_HELP_OPTIONS()
 	btn_logs.OnMouseReleased = function()
 		JB.Util.iterate(right:GetChildren()):Remove();
 
-		local lbl=Label("Round Logs",right);
+		local lbl=Label("Round logs",right);
 		lbl:SetPos(20,20);
 		lbl:SetFont("JBLarge");
 		lbl:SizeToContents();
@@ -245,14 +245,22 @@ function JB.MENU_HELP_OPTIONS()
 		end
 	end
 	btn_credits.OnMouseReleased = function()
-		local text = [[Poseidon Servers are a gaming community primarily based around the game "Garry's Mod"
-We host various different kinds of Garry's Mod servers and are always open to suggestions on new servers/gamemodes.
+		local text = [[This is the seventh version of the first Garry's Mod edition of Jail Break.
+It is a complete rewrite and shares no code with previous versions, or any unofficial remake of the gamemode.
 
-If you are interested in donating to help keep this server alive and get yourself some awsome in game content you can donate by typing !donate in chat.
-You also recieve donator benifits across the Poseidon Servers network which means if you donate for DarkRP you get the donation benifits on TTT, Deathrun, Jailbreak, etc.
+Jail Break was created by Casual Bananas, a software development company based in The Netherlands. We do much more than just Garry's Mod gamemodes and addons; check out our website at casualbananas.com to find out more about our company and what services we offer.
 
-For more infomation on our servers please visit our website at:
-www.poseidonservers.net ]];
+
+CREDITS
+: Excl (STEAM_0:0:19441588) - Lead developer in charge of Jail Break since version 1
+
+SPECIAL THANKS
+: Camamoow - Inciting me to make this new version of Jail Break.
+: VTG Community - Bug testing, suggestions and being the first Jail Break 7 server.
+
+
+
+Copyright © Casual Bananas 2014 ]];
 
 		JB.Util.iterate(right:GetChildren()):Remove();
 		JB.Util.iterate{Label("About",right)}:SetPos(20,20):SetFont("JBLarge"):SizeToContents():SetColor(JB.Color.white);
