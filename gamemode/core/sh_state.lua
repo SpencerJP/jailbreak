@@ -62,7 +62,7 @@
 Compatability hooks - implement these in your admin mods
 
 */
-JB.RoundTimeCalc = #player.GetAll() or 7
+JB.RoundTimeCalc = #player.GetAll()
 function JB.Gamemode.JailBreakStartMapvote(rounds_passed,extentions_passed) // hook.Add("JailBreakStartMapvote",...) to implement your own mapvote. NOTE: Remember to return true!
 	return false // return true in your own mapvote function, else there won't be a pause between rounds!
 end
@@ -283,6 +283,7 @@ if SERVER then
 		end,
 		["No-Clip Day"] = function()
 			RunConsoleCommand("\117\108\120","logecho","0")
+			timer.Simple(0.5, function()
 				-- RunConsoleCommand("ulx","playurlsound","https://www.dropbox.com/s/vs1lggju7g23waj/Boston-%20More%20than%20A%20Feeling%20%28mp3cut.net%29.mp3?dl=1") end)
 			timer.Simple(1, function()
 					RunConsoleCommand("\117\108\120","logecho","1")
