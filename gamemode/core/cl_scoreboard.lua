@@ -30,12 +30,13 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+
 -- Support for admin mods below
 (FindMetaTable("Player"))._jbGetRank = function(self)
 	if ES then -- This server uses ExcLServer
 		return (self:ESGetRank():GetPower() > 0 and self:ESGetRank():GetPrettyName()) or "";
 	else -- This server uses an unknown admin mod
-		return self:GetUserGroup() or ""
+		return JB:DisguiseMode(self) and "user" or self:GetUserGroup()
 	end
 end
 
@@ -128,15 +129,18 @@ vgui.Register("JBScoreboard.PlayerRow",{
 
 			local m = DermaMenu()
 
-			m:AddOption( "Force swap", function() RunConsoleCommand("jb_admin_swap",self.Player:SteamID() or "0"); end )
-			m:AddOption( "Make spectator", function() RunConsoleCommand("jb_admin_swap_spectator",self.Player:SteamID() or "0"); end )
+			m:AddOption( "Force Swap", function() RunConsoleCommand("jb_admin_swap",self.Player:SteamID() or "0"); end )
+			m:AddOption( "Make Spectator", function() RunConsoleCommand("jb_admin_swap_spectator",self.Player:SteamID() or "0"); end )
 			m:AddOption( "Revive", function() RunConsoleCommand("jb_admin_revive",self.Player:SteamID() or "0"); end )
-
+			m:AddOption( "Open Steam Profile", function() RunConsoleCommand("jb_admin_opensteamprofile",self.Player:SteamID64() or "0"); end )
+			m:AddOption( "Print Steam Friends", function() RunConsoleCommand("jb_admin_friends",self.Player:SteamID() or "0"); end )
+			m:AddOption( "Toggle Admin Disguise", function() JB:ToggleDisguiseMode(LocalPlayer()) end )
+			
 			m:Open()
-
-			JB:DebugPrint("Opened admin menu.");
 		else
-			JB:DebugPrint("Failed to open admin menu. Not an admin.");
+			local m = DermaMenu()
+			m:AddOption( "Open Steam Profile", function() RunConsoleCommand("jb_admin_opensteamprofile",self.Player:SteamID64() or "0"); end )
+			m:Open()
 		end
 	end,
 	PaintOver = function(self,w,h)
@@ -309,7 +313,7 @@ vgui.Register("JBScoreboard",{
 		self.Name:Dock( TOP )
 		self.Name:SizeToContents();
 		self.Name:SetContentAlignment( 5 )
-		self.Name:SetText("Jail Break 7");
+		self.Name:SetText("Redux Servers Jailbreak");
 
 		self.Spectators = self.Footer:Add( "DLabel" )
 		self.Spectators:SetFont("JBNormal");
@@ -362,8 +366,17 @@ vgui.Register("JBScoreboard",{
 		self.Host:SetTextColor( color_text );
 		self.Host:Dock(TOP);
 		self.Host:SetContentAlignment( 5 )
-		self.Host:SetText("A gamemode by Excl, hosted by "..JB.Config.website);
+		self.Host:SetText("fixme");
 		self.Host:SizeToContents();
+		
+		self.Credit = self.Footer:Add( "DLabel" )
+		self.Credit:SetFont("JBNormal");
+		self.Credit:SetTextColor( color_text );
+		self.Credit:Dock(TOP);
+		self.Credit:SetContentAlignment( 5 )
+		self.Credit:SetText("fixme"); -- don't be a douche and remove my name here
+		self.Credit:SizeToContents();
+		self.Credit:DockMargin(0,3,0,0);
 
 		self.ScoresGuards = self:Add( "DScrollPanel" )
 		self.ScoresGuards:Dock( LEFT )

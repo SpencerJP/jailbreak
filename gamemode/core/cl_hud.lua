@@ -35,15 +35,12 @@
 /* HINTS FOR THE SPECTATOR HUD (up here for easy access) */
 local Hints = {
 	"To initiate a last request, the last remaining prisoner can press F4 and choose from a number of different requests.",
-	"The last guard alive may kill all prisoners, unless at the point he becomes last guard there are under three prisoners alive.",
 	"The warden is the only guard who is allowed to give complicated commands, normal guards may only give simple commands (e.g. 'Move', 'Drop your weapon')",
 	"At the start of each round, the guards can claim the warden rank from the F4 menu.",
 	"The warden can hold C to place markers around the map.",
-	"Jail Break for Garry's Mod was created by Excl. Visit the developer's website at CasualBananas.com!",
 	"The warden can spawn various items and control certain options via the F4 menu.",
 	"Markers placed by the warden expire two minutes after being placed.",
 	"Respect your warden! Insulting your warden or disobeying orders will probably make him have you executed.",
-	"You are playing the official Jail Break for Garry's Mod, version 7, a complete remake of the gamemode we all have come to love.",
 	"Guards can run a little bit faster than prisoners. Make sure you only make your escape when nobody is looking!",
 };
 
@@ -298,7 +295,7 @@ local drawTimer = function()
 	drawTexturedRect(scrW-16-128,y,128,64);
 
 	local timerText = state == STATE_IDLE and "WAITING" or state == STATE_ENDED and "ENDED" or state == STATE_MAPVOTE and "MAPVOTE" or
-	convertTime(60*(state == STATE_LASTREQUEST and 3 or 10) - (CurTime() - JB.RoundStartTime));
+	convertTime(60*(state == STATE_LASTREQUEST and 3 or JB:GetRoundTime()) - (CurTime() - JB.RoundStartTime));
 
 	drawSimpleShadowText(timerText,"JBNormal",scrW-16-64,y+32,JB.Color.white,1,1);
 end

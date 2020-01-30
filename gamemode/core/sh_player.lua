@@ -30,7 +30,21 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+function JB:ToggleDisguiseMode(ply)
+	if not ply.InDisguise then
+		ply.InDisguise = true
+	else
+		ply.InDisguise = false
+	end
+end
 
+function JB:DisguiseMode(ply)
+	if ply.InDisguise and ply:IsAdmin() then
+		return true
+	else
+		return false
+	end
+end
 
 JB.Gamemode.PlayerNoClip = function(gm,p)
 	return p:IsSuperAdmin();

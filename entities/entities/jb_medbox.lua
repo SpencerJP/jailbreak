@@ -30,25 +30,45 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+AddCSLuaFile();
 
-local LR = JB.CLASS_LR();
-LR:SetName("Airborne Battle");
-LR:SetDescription("The guard and the prisoner both get a Shotgun and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
-LR:SetStartCallback(function(prisoner,guard)
-	for _,ply in ipairs{prisoner,guard} do
-		ply:StripWeapons();
-		ply:Give("weapon_jb_famas");
-		ply:Give("weapon_jb_knife");
-		ply:GiveAmmo(899,"SMG1");
-		ply:SetHealth(100);
-		ply:SetArmor(0);
-	end
-end)
-LR:SetIcon(Material("icon16/flag_green.png"))
-local this = LR();
+ENT.Type             = "anim"
+ENT.Base             = "base_anim"
 
-hook.Add("PlayerBindPress", "JB.PlayerBindPress.LR.Airborne", function(pl, bind, pressed) // Not the safest way, but it requires the least amount of touching code outside of this file (without using nasty hacky methods)
-	if JB.LastRequest == this and table.HasValue(JB.LastRequestPlayers,pl) and pl:IsOnGround() and string.find( bind,"+attack" ) then
-		return true;
+function ENT:Initialize()    
+	if SERVER then
+		self:SetModel( "models/items/healthkit.mdl" );
+		self:SetUseType(SIMPLE_USE);
+		self:PhysicsInit( SOLID_VPHYSICS )
+		self:SetMoveType(MOVETYPE_VPHYSICS);
+		self:SetSolid(SOLID_VPHYSICS);
+		
+		local phys = self:GetPhysicsObject()
+		if ( IsValid( phys ) ) then
+			phys:Wake()	
+		end
+   
 	end
-end)
+end
+
+function ENT:Use(p)
+	if IsValid(p) and (not p.nextHealthCrate or p.nextHealthCrate < CurTime()) then
+		p.nextHealthCrate = CurTime() + 240;
+		local maxhealth = p:GetMaxHealth();
+		if p:Health() + 50 >= maxhealth then
+			p:SetHealth(maxhealth)
+		else
+			p:SetHealth(p:Health()+50)
+		end
+		
+		p:SendNotification("You picked up a health crate");
+		
+		self:Remove();
+	elseif IsValid(p) then
+		p:SendQuickNotification("You already picked up a health crate!");
+	end
+end
+
+function ENT:Draw()
+	self:DrawModel();
+end

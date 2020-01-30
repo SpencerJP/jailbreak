@@ -63,6 +63,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar ( "Bool", 0, "JBWarden_PVPDamage");
 	self:NetworkVar ( "Bool", 1, "JBWarden_ItemPickup");
+	self:NetworkVar ( "Bool", 0, "JBWarden_TeamsEnabled");
+	self:NetworkVar ( "Bool", 0, "JBWarden_ScaleMode");
 		
 	if ( SERVER ) then
 		self:SetJBRoundStartTime(0);

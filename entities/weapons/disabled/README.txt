@@ -1,0 +1,1 @@
+jb-swb replaces these weapons

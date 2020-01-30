@@ -36,7 +36,7 @@ if IsValid(clientModels["weapon_jb_knife"]) then
 	clientModels["weapon_jb_knife"]:SetNoDraw(true);
 end
 
-local primWeps = {"weapon_jb_weapon_jb_ak47","weapon_jb_awp","weapon_jb_m3","weapon_jb_m4a1","weapon_jb_mp5navy","weapon_jb_scout","weapon_jb_scout_ns","weapon_jb_tmp","weapon_jb_awp","weapon_jb_famas","weapon_jb_galil","weapon_jb_mac10","weapon_jb_p90","weapon_jb_sg552","weapon_jb_ump"};
+local primWeps = {"weapon_jb_ak47","weapon_jb_awp","weapon_jb_m3","weapon_jb_m4a1","weapon_jb_mp5navy","weapon_jb_scout","weapon_jb_scout_ns","weapon_jb_tmp","weapon_jb_awp","weapon_jb_famas","weapon_jb_galil","weapon_jb_mac10","weapon_jb_p90","weapon_jb_sg552","weapon_jb_ump"};
 local secoWeps = {"weapon_jb_deagle","weapon_jb_fiveseven","weapon_jb_glock","weapon_jb_usp"};
 
 local wmeta = FindMetaTable("Weapon");

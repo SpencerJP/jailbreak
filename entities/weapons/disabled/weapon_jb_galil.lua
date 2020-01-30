@@ -30,25 +30,39 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+AddCSLuaFile()
 
-local LR = JB.CLASS_LR();
-LR:SetName("Airborne Battle");
-LR:SetDescription("The guard and the prisoner both get a Shotgun and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
-LR:SetStartCallback(function(prisoner,guard)
-	for _,ply in ipairs{prisoner,guard} do
-		ply:StripWeapons();
-		ply:Give("weapon_jb_famas");
-		ply:Give("weapon_jb_knife");
-		ply:GiveAmmo(899,"SMG1");
-		ply:SetHealth(100);
-		ply:SetArmor(0);
-	end
-end)
-LR:SetIcon(Material("icon16/flag_green.png"))
-local this = LR();
+	SWEP.PrintName			= "Galil"			
 
-hook.Add("PlayerBindPress", "JB.PlayerBindPress.LR.Airborne", function(pl, bind, pressed) // Not the safest way, but it requires the least amount of touching code outside of this file (without using nasty hacky methods)
-	if JB.LastRequest == this and table.HasValue(JB.LastRequestPlayers,pl) and pl:IsOnGround() and string.find( bind,"+attack" ) then
-		return true;
-	end
-end)
+SWEP.Slot				= 1
+SWEP.SlotPos			= 1
+
+SWEP.HoldType			= "ar2"
+SWEP.Base				= "weapon_jb_base"
+SWEP.Category			= "Jailbreak Weapons"
+
+SWEP.Spawnable			= true
+SWEP.AdminSpawnable		= true
+
+SWEP.ViewModel				= "models/weapons/cstrike/c_rif_galil.mdl"
+SWEP.WorldModel				= "models/weapons/w_rif_galil.mdl"
+
+SWEP.Weight				= 5
+SWEP.AutoSwitchTo		= true
+SWEP.AutoSwitchFrom		= false
+
+SWEP.Primary.Sound			= Sound( "Weapon_Galil.Single" )
+SWEP.Primary.Recoil			= 0.5
+SWEP.Primary.Damage			= 25
+SWEP.Primary.NumShots		= 1
+SWEP.Primary.Cone			= 0.03
+SWEP.Primary.ClipSize		= 35
+SWEP.Primary.Delay			= 0.1
+SWEP.Primary.DefaultClip	= 90
+SWEP.Primary.Automatic		= true
+SWEP.Primary.Ammo			= "smg1"
+
+SWEP.Positions = {};
+SWEP.Positions[1] = {pos = Vector(-2.441, -4.803, 2.039), ang = Vector(0,0,0)};
+SWEP.Positions[2] = {pos = Vector(-6.361, -12.801, 2.519), ang = Vector(0,0,0)};
+SWEP.Positions[3] = {pos = Vector(6.534, -6, 0.708), ang = Vector(0,70,0)};

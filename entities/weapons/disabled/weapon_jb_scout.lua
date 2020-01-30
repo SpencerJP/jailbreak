@@ -30,25 +30,80 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+AddCSLuaFile()
 
-local LR = JB.CLASS_LR();
-LR:SetName("Airborne Battle");
-LR:SetDescription("The guard and the prisoner both get a Shotgun and knife, but they can only fire if they are in the air, so they will have to either jump from fall in order to fire.");
-LR:SetStartCallback(function(prisoner,guard)
-	for _,ply in ipairs{prisoner,guard} do
-		ply:StripWeapons();
-		ply:Give("weapon_jb_famas");
-		ply:Give("weapon_jb_knife");
-		ply:GiveAmmo(899,"SMG1");
-		ply:SetHealth(100);
-		ply:SetArmor(0);
-	end
-end)
-LR:SetIcon(Material("icon16/flag_green.png"))
-local this = LR();
+if (CLIENT) then
+	scopeTex = surface.GetTextureID("scope/scope_normal")
+end
 
-hook.Add("PlayerBindPress", "JB.PlayerBindPress.LR.Airborne", function(pl, bind, pressed) // Not the safest way, but it requires the least amount of touching code outside of this file (without using nasty hacky methods)
-	if JB.LastRequest == this and table.HasValue(JB.LastRequestPlayers,pl) and pl:IsOnGround() and string.find( bind,"+attack" ) then
-		return true;
+SWEP.PrintName			= "M40A1"	
+
+SWEP.Slot				= 1
+SWEP.SlotPos			= 1
+SWEP.HoldType			= "ar2"
+SWEP.Base				= "weapon_jb_base"
+SWEP.Category			= "Jailbreak Weapons"
+
+SWEP.Spawnable			= true
+SWEP.AdminSpawnable		= true
+
+SWEP.ViewModel			= "models/weapons/cstrike/c_snip_scout.mdl"
+SWEP.WorldModel			= "models/weapons/w_snip_scout.mdl"
+
+SWEP.Weight				= 3
+SWEP.AutoSwitchTo		= true
+SWEP.AutoSwitchFrom		= false
+
+SWEP.Primary.Sound			= Sound("Weapon_Scout.Single")
+SWEP.Primary.Recoil			= 2
+SWEP.Primary.Damage			= 90
+SWEP.Primary.NumShots		= 1
+SWEP.Primary.Cone			= 0.00001
+SWEP.Primary.ClipSize		= 6
+SWEP.Primary.Delay			= 1.1
+SWEP.Primary.DefaultClip	= 30
+SWEP.Primary.Automatic		= false
+SWEP.Primary.Ammo			= "smg1"
+
+SWEP.Secondary.Automatic	= false
+SWEP.Secondary.ClipSize		= -1
+SWEP.Secondary.DefaultClip	= -1
+
+function SWEP:TranslateFOV(fov)
+	if self:GetNWMode() == 2 then
+		return 20
+	else
+		return fov
 	end
-end)
+end
+
+
+
+if CLIENT then
+
+function SWEP:AdjustMouseSensitivity()
+	return self:GetNWMode() == 2 and .20 or 1;
+end
+
+local scopeMat = Material("jailbreak_excl/scope.png");
+
+function SWEP:DrawHUD()
+	if self:GetNWMode() == 2 then
+
+		local size = ScrH();
+
+		surface.SetDrawColor(JB.Color.black)
+
+		surface.DrawRect(0, 0, (ScrW()-size) / 2, size);
+		surface.DrawRect(ScrW() - ((ScrW()-size) / 2), 0, (ScrW()-size) / 2, size);
+	
+		surface.DrawLine(0,ScrH()/2,ScrW(),ScrH()/2)
+		surface.DrawLine(ScrW()/2,0,ScrW()/2,ScrH())
+	
+		surface.SetDrawColor(JB.Color.black)
+		surface.SetMaterial(scopeMat)
+		surface.DrawTexturedRect( (ScrW()/2) - (size/2) , 0, size, size)
+	end
+end
+
+end

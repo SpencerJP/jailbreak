@@ -29,22 +29,19 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
+hook.Add("OnEntityCreated", "JB.OnEntityCreated.InvalidateDefaultWeapons", function(entity)
+    if string.lower(string.Left(entity:GetClass(), 6)) == "weapon" or entity:IsWeapon() then
+        timer.Simple(0, function()
+            if not IsValid(entity) then return end
+            entity.IsDropped = true
+            entity.BeingPickedUp = false
+            local object = entity:GetPhysicsObject()
 
-
-
-hook.Add( "OnEntityCreated", "JB.OnEntityCreated.InvalidateDefaultWeapons", function( entity )
-	if string.lower( string.Left( entity:GetClass(), 6 ) ) == "weapon" or entity:IsWeapon() then
-		timer.Simple( 0, function()
-			if not IsValid( entity ) then return end
-			entity.IsDropped = true;
-			entity.BeingPickedUp = false;
-
-			local object = entity:GetPhysicsObject();
-			if object and IsValid( object ) then
-				object:EnableGravity( true );
-				object:EnableMotion( true );
-				object:Wake();
-			end
-		end)		
-	end
+            if object and IsValid(object) then
+                object:EnableGravity(true)
+                object:EnableMotion(true)
+                object:Wake()
+            end
+        end)
+    end
 end)
