@@ -29,80 +29,85 @@
 -- ##                                                                                ##
 -- ##                                                                                ##
 -- ####################################################################################
+TEAM_GUARD = 2
+TEAM_PRISONER = 1
 
-
-TEAM_GUARD 		= 2;
-TEAM_PRISONER 	= 1;
 JB.Gamemode.CreateTeams = function()
-	team.SetUp( TEAM_GUARD, "Guards", JB.Color["#0066FF"]	)
-	team.SetUp( TEAM_PRISONER, "Prisoners", JB.Color["#E31100"] )
-
-	team.SetSpawnPoint( TEAM_GUARD,"info_player_counterterrorist" );
-	team.SetSpawnPoint( TEAM_PRISONER,"info_player_terrorist" );
-	team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" ) 
+    team.SetUp(TEAM_GUARD, "Guards", JB.Color["#0066FF"])
+    team.SetUp(TEAM_PRISONER, "Prisoners", JB.Color["#E31100"])
+    team.SetSpawnPoint(TEAM_GUARD, "info_player_counterterrorist")
+    team.SetSpawnPoint(TEAM_PRISONER, "info_player_terrorist")
+    team.SetSpawnPoint(TEAM_SPECTATOR, "worldspawn")
 end
 
 -- Utility functions
 -- This is modified because Excl's doesn't work.
-JB.Config.guardsAllowed = CreateConVar( "jb_config_guards_allowed", "3", FCVAR_ARCHIVE, " Ratio of guards allowed" )
+JB.Config.guardsAllowed = CreateConVar("jb_config_guards_allowed", "3", FCVAR_ARCHIVE, " Ratio of guards allowed")
+
 function JB:GetGuardsAllowed()
-    if #team.GetPlayers(TEAM_GUARD) <= 0 then
-        return 1;
-    end
-	if #team.GetPlayers(TEAM_PRISONER) <= 0 then
-        return 1;
-    end
-	return math.ceil(team.NumPlayers(TEAM_PRISONER) / JB.Config.guardsAllowed:GetInt());
+    if #team.GetPlayers(TEAM_GUARD) <= 0 then return 1 end
+    if #team.GetPlayers(TEAM_PRISONER) <= 0 then return 1 end
+
+    return math.ceil(team.NumPlayers(TEAM_PRISONER) / 3)
 end
 
 -- Excl's non working team balancer
 --function JB:GetGuardsAllowed()
-    --if #team.GetPlayers(TEAM_GUARD) <= 0 then
-        --return 1;
-    --end
-    --return math.ceil((#team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER)) * (tonumber(JB.Config.guardsAllowed)/100));
+--if #team.GetPlayers(TEAM_GUARD) <= 0 then
+--return 1;
 --end
-
+--return math.ceil((#team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER)) * (tonumber(JB.Config.guardsAllowed)/100));
+--end
 function JB:BalanceTeams()
-	if ( #team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER) ) <= 1 then return end
+    if (#team.GetPlayers(TEAM_GUARD) + #team.GetPlayers(TEAM_PRISONER)) <= 1 then return end
+    local balls = {}
 
-	local balls = {};
-	
-	if #team.GetPlayers(TEAM_GUARD) > JB:GetGuardsAllowed() then
-		for i=1, (#team.GetPlayers(TEAM_GUARD) - JB:GetGuardsAllowed()) do
-			local ply = table.Random(team.GetPlayers(TEAM_GUARD));
-			if IsValid(ply) then
-				ply:SetTeam(TEAM_PRISONER);
-				ply:ChatPrint("You were moved to Prisoners to make the game more fair.");
-				balls[#balls+1] = ply;
-			end
-		end
-	end
-	
-	return balls;
+    if #team.GetPlayers(TEAM_GUARD) > JB:GetGuardsAllowed() then
+        for i = 1, (#team.GetPlayers(TEAM_GUARD) - JB:GetGuardsAllowed()) do
+            local ply = table.Random(team.GetPlayers(TEAM_GUARD))
+
+            if IsValid(ply) then
+                ply:SetTeam(TEAM_PRISONER)
+                ply:ChatPrint("You were moved to Prisoners to make the game more fair.")
+                balls[#balls + 1] = ply
+            end
+        end
+    end
+
+    return balls
 end
 
-local count;
+local count
+
 function JB:AliveGuards()
-	count=0;
-	for _,v in pairs(team.GetPlayers(TEAM_GUARD))do
-		if v:Alive() then
-			count = count+1;
-		end
-	end
-	return count;
+    count = 0
+
+    for _, v in pairs(team.GetPlayers(TEAM_GUARD)) do
+        if v:Alive() then
+            count = count + 1
+        end
+    end
+
+    return count
 end
 
 function JB:AlivePrisoners()
-	count=0;
-	for _,v in pairs(team.GetPlayers(TEAM_PRISONER))do
-		if v:Alive() then
-			count = count+1;
-		end
-	end
-	return count;
+    count = 0
+
+    for _, v in pairs(team.GetPlayers(TEAM_PRISONER)) do
+        if v:Alive() then
+            count = count + 1
+        end
+    end
+
+    return count
 end
 
 --Useless gooks
-function GM:PlayerJoinTeam() return false end
-function GM:PlayerRequestTeam() return false end
+function GM:PlayerJoinTeam()
+    return false
+end
+
+function GM:PlayerRequestTeam()
+    return false
+end

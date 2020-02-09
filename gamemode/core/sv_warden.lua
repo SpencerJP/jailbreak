@@ -64,9 +64,10 @@ concommand.Add("jb_warden_changecontrol", function(p, c, a)
     local val = a[2]
 
     if not opt or not val then
-        --elseif opt == "PVP" then
-        --JB.TRANSMITTER:SetJBWarden_PVPDamage(tobool(val));
-        --JB:BroadcastNotification("Friendly fire is now "..(tobool(val) and "enabled" or "disabled"));
+    elseif opt == "PVP" then
+        JB.TRANSMITTER:SetJBWarden_PVPDamage(tobool(val))
+        JB:BroadcastNotification("Friendly fire is now " .. (tobool(val) and "enabled" or "disabled"))
+
         return
     elseif opt == "Pickup" then
         JB.TRANSMITTER:SetJBWarden_ItemPickup(tobool(val))
